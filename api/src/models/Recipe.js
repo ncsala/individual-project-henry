@@ -5,47 +5,47 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
 	// defino el modelo
 	sequelize.define('recipe', {
-        // ID: *
-        recipe_id: {
-            type: DataTypes.UUID,
-            defaultValue: DataTypes.UUIDV4,
-            primaryKey: true,
-            allowNull: false,
-        },
-        // Nombre *
+		// ID: *
+		recipe_id: {
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
+			primaryKey: true,
+			allowNull: false,
+		},
+		// Nombre *
 		name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-        // Resumen del plato *
+		// Resumen del plato *
 		dish_description: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
-        // Puntuación
+		// Puntuación
 		score: {
 			type: DataTypes.INTEGER,
-            allowNull: true,
+			allowNull: true,
 		},
-        // Nivel de "comida saludable"
+		// Nivel de "comida saludable"
 		healthy_food_level: {
 			type: DataTypes.INTEGER,
-            allowNull: true,
+			allowNull: true,
 		},
-        // Paso a paso
+		// Paso a paso
 		step_by_step: {
 			type: DataTypes.STRING,
-            allowNull: true,
+			allowNull: true,
 		},
-        image: {
-            type: DataTypes.STRING,
-            allowNull: true,
-        },
-        // Recipientes creados en la base de datos
-        created_in_db: {
-            type: DataTypes.BOOLEAN,
-            allowNull: false,
-            defaultValue: true,
-        },
+		image: {
+			type: DataTypes.STRING,
+			allowNull: true,
+		},
+		// Recipientes creados en la base de datos
+		created_in_db: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: true,
+		},
 	});
 };

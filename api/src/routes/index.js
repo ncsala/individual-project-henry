@@ -1,4 +1,5 @@
 const { Router } = require('express');
+const fetch = require('fetch');
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
 
