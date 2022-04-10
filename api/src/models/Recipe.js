@@ -13,7 +13,7 @@ module.exports = (sequelize) => {
 			allowNull: false,
 		},
 		// Nombre *
-		name: {
+		recipe_name: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -44,8 +44,8 @@ module.exports = (sequelize) => {
 		// Recipientes creados en la base de datos
 		created_in_db: {
 			type: DataTypes.BOOLEAN,
-			allowNull: false,
 			defaultValue: true,
+			allowNull: false,
 		},
 	});
 };
