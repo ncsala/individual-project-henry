@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Router } = require('express');
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY5;
+const apiKey = process.env.API_KEY0;
 const { Recipe, Type_of_diet } = require('../db');
 
 // Importar todos los routers;
@@ -21,9 +21,11 @@ const getApiRecipes = async () => {
 
     // Se convierte la respuesta de un objeto JSON a un objeto de JS
 	const data = await response.json();
+    // console.log(data)
 
 	// Se mapea solo los datos que se necesitan
-	const recipes = await data.results.map((recipe) => {
+    // SOLUCIONAR CANNOT READ PROPERTIES OF UNDEFINED MAP
+	const recipes = await data.results?.map((recipe) => {
 		return {
 			recipe_id: recipe.id,
 			recipe_name: recipe.title,
@@ -40,7 +42,8 @@ const getApiRecipes = async () => {
 		};
 	});
 
-	return recipes;
+    // Para que no se rompa si la api no devuelve nada
+    return (recipes) ? recipes : [];
 };
 
 // Se obtiene la información de la BD
@@ -63,8 +66,9 @@ const getBdAndApiRecipes = async () => {
 	const apiRecipes = await getApiRecipes();
 	const dbRecipes = await getDbRecipes();
 
+    console.log(apiRecipes)
 	const allRecipes = [...apiRecipes, ...dbRecipes];
-	// const apiBdRecipes = apiRecipes.concat(dbRecipes);
+	// const allRecipes = apiRecipes.concat(dbRecipes);
 
 	return allRecipes;
 };
@@ -98,6 +102,7 @@ router.get('/recipes', async (request, response) => {
 	} catch (error) {
 		console.log(error);
 		response.status(500).send({
+            //CAMBIAR ERROR POR MENSAJE
 			message: error,
 		});
 	}

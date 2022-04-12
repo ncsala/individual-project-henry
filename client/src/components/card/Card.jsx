@@ -7,19 +7,16 @@ const Card = ({ image, recipe_name, diets }) => {
 
     return (
         <>
-            <h3>{recipe_name}</h3>
-
             {
                 (!image) ? <img src={defaultRecipeImg} alt='Imagen predeterminada' /> :
                     <img src={image} alt={'Imagen receta de ' + recipe_name} />
             }
+            <h3>{recipe_name}</h3>
 
-            <ul>
-                {
-                    (!diets) ? <p>Dieta no disponible</p> :
-                        dietTypes.join(', ')
-                }
-            </ul>
+            {
+                (!diets) ? <p>Dieta no disponible</p> :
+                    <p>{dietTypes.join(', ')} </p>
+            }
         </>
     );
 };
