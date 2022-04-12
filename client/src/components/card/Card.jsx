@@ -1,5 +1,5 @@
 import React from 'react';
-import defaultRecipeImg from '../../assets/default-recipe.png'
+import defaultRecipeImg from '../../assets/cooking.png'
 
 const Card = ({ image, recipe_name, diets }) => {
 
