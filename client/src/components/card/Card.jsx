@@ -2,6 +2,9 @@ import React from 'react';
 import defaultRecipeImg from '../../assets/default-recipe.png'
 
 const Card = ({ image, recipe_name, diets }) => {
+
+    const dietTypes = (diets) ? diets.map((diet) => diet) : null
+
     return (
         <>
             <h3>{recipe_name}</h3>
@@ -13,10 +16,8 @@ const Card = ({ image, recipe_name, diets }) => {
 
             <ul>
                 {
-                    (!diets) ? <p>No disponible</p> :
-                        diets.map((diet, index) => {
-                            return <li key={index}>{diet}</li>
-                        })
+                    (!diets) ? <p>Dieta no disponible</p> :
+                        dietTypes.join(', ')
                 }
             </ul>
         </>

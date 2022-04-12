@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Router } = require('express');
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY4;
+const apiKey = process.env.API_KEY5;
 const { Recipe, Type_of_diet } = require('../db');
 
 // Importar todos los routers;
