@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Router } = require('express');
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY3;
+const apiKey = process.env.API_KEY4;
 const { Recipe, Type_of_diet } = require('../db');
 
 // Importar todos los routers;
@@ -16,10 +16,10 @@ const router = Router();
 const getApiRecipes = async () => {
 	// Se obtiene la información de la API
 	const response = await fetch(
-		`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&addRecipeInformation=true&number=100`
+		`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=50&apiKey=${apiKey}`
 	);
 
-	// Se convierte la respuesta en un objeto JSON
+    // Se convierte la respuesta de un objeto JSON a un objeto de JS
 	const data = await response.json();
 
 	// Se mapea solo los datos que se necesitan
