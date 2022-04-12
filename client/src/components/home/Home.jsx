@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom';
 import { getRecipes } from '../../redux/actions/actions';
+import Card from '../card/Card.jsx';
 
 
 // Input de búsqueda para encontrar recetas por nombre
@@ -16,8 +17,10 @@ import { getRecipes } from '../../redux/actions/actions';
 const Home = () => {
 
     const dispatch = useDispatch()
-    
+
     // Se trae en la constante todo lo que esta en el estado de recipes
+    // El useSelector se usa para 
+    // allRecipes = [{receta1}, {receta2}, {receta3}]
     const allRecipes = useSelector((state) => state.recipes)
 
     // useEffect sirve para que el renderizado se realice una sola vez cuando se monta el componente
@@ -52,20 +55,29 @@ const Home = () => {
             <Link to='/recipe'>
                 Crear Receta
             </Link>
-            <div className="recipes-container">
-                {allRecipes.map((recipe) => {
-                    return (
-                        <div className="recipe-card" key={recipe.recipe_id}>
-                            <img src={recipe.image} alt={recipe.recipe_name} />
-                            <h2>{recipe.recipe_name}</h2>
-                            <p>{recipe.diets}</p>
-                        </div>
-                    )
-                })
+
+            <div>
+                {(!allRecipes.length) ? <h2>Cargando...</h2> :
+                    allRecipes.map((recipe) => {
+                        return (
+                            <div className='recipe-card' key={recipe.recipe_id}>
+                                <Card
+                                    image={recipe.image}
+                                    recipe_name={recipe.recipe_name}
+                                    diets={recipe.diets}
+                                />
+                            </div>
+                        )
+                    })
                 }
             </div>
+
+            {/* Cuando no carga por alguna razón las recetas, muestro mensaje 
+            ARREGLAR, muestra el mensaje aunque todavía aun cuando esta esperando la respuesta */}
+            {(!allRecipes.length) ? (<h4>¡Opss!, no hay recetas para mostrar esta vez, quizás la próxima vez tengamos ganas de cocinar algo</h4>) : null}
         </>
     )
 }
+
 
 export default Home;
