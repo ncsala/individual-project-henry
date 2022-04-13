@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { getRecipes, filterByDiet } from 'redux/actions/actions';
+import { getRecipes, filterByDiet, orderAlphabetically } from 'redux/actions/actions';
 
 // Componentes
 import Card from 'components/card/Card';
@@ -29,7 +29,7 @@ const Home = () => {
     // El useSelector se usa para
     // allRecipes = [{receta1}, {receta2}, {receta3}]
     const allRecipes = useSelector((state) => state.recipes);
-
+    const [order, setOrder] = useState('ascending');
     // Se crea la paginación de 9 recetas por pagina
     // Para renderizar cuando modifique el estado
     const [currentPage, setCurrentPage] = useState(1);
@@ -55,7 +55,15 @@ const Home = () => {
     }, []);
 
     function handleFilteredByDiet(event) {
+        event.preventDefault();
         dispatch(filterByDiet(event.target.value))
+    }
+
+    function handleOrderAlphabetically(event) {
+        event.preventDefault();
+        dispatch(orderAlphabetically(event.target.value))
+        setCurrentPage(1);
+        setOrder(`Ordenado ${event.target.value}`)
     }
 
     // Recargamos las recipes cuando con el botón
@@ -73,9 +81,9 @@ const Home = () => {
                     <input type='text' placeholder='Buscar recetas por nombre' />
                     <button>Buscar</button>
                 </div>
-                <select name='' id=''>
-                    <option value='asc'>Ascendente</option>
-                    <option value='desc'>Descendente</option>
+                <select onChange={handleOrderAlphabetically}name='' id=''>
+                    <option value='ascending'>Ascendente</option>
+                    <option value='descending'>Descendente</option>
                 </select>
                 <select onChange={handleFilteredByDiet} name='' id=''>
                     <option value='all'>Todos</option>

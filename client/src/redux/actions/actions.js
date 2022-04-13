@@ -1,15 +1,16 @@
 export const GET_RECIPES = 'GET_RECIPES',
-	FILTER_BY_DIET = 'FILTER_BY_DIET';
+	FILTER_BY_DIET = 'FILTER_BY_DIET',
+    ORDER_BY_ALPHABET = 'ORDER_BY_ALPHABET'
 export const localHost = 'http://localhost:3001';
 
 // Busca la data del Backend de las recetas y dispare un action con la data
 export function getRecipes() {
-	return async function (dispa) {
+	return async function (dispatch) {
 		// Con fetch
 		fetch(`${localHost}/recipes`)
 			.then((response) => response.json())
 			.then((allRecipes) => {
-				return dispa({
+				return dispatch({
 					type: GET_RECIPES,
 					payload: allRecipes,
 				});
@@ -32,4 +33,12 @@ export function filterByDiet(diet) {
 		type: FILTER_BY_DIET,
 		payload: diet,
 	};
+}
+
+// Dispara acción para ordenar las recetas por orden alfabético
+export function orderAlphabetically(ascendingOrDescending) {
+    return {
+        type: ORDER_BY_ALPHABET,
+        payload: ascendingOrDescending,
+    }
 }
