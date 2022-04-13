@@ -5,11 +5,13 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { getRecipes } from 'redux/actions/actions';
+import { getRecipes, filterByDiet } from 'redux/actions/actions';
 
 // Componentes
 import Card from 'components/card/Card';
 import Paginated from 'components/paginated/Paginated';
+
+import './Home.css'
 
 const RECIPES_PER_PAGE = 9;
 
@@ -40,7 +42,7 @@ const Home = () => {
         lastRecipeInPage
     );
 
-    // Función para cambiar estado
+    // Función para cambiar estado de acuerdo a la página seleccionada
     const paginated = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
@@ -52,6 +54,11 @@ const Home = () => {
         dispatch(getRecipes());
     }, []);
 
+    function handleFilteredByDiet(event) {
+        dispatch(filterByDiet(event.target.value))
+    }
+
+    // Recargamos las recipes cuando con el botón
     const handleClick = (event) => {
         event.preventDefault();
         dispatch(getRecipes());
@@ -60,21 +67,36 @@ const Home = () => {
     return (
         <>
             <h1>Busque su receta</h1>
-            <button onClick={handleClick}>Recargar Recetas</button>
-            <div className='search-container'>
-                <input type='text' placeholder='Buscar recetas por nombre' />
-                <button>Buscar</button>
+            <div className='que-se-yo'>
+                <button onClick={handleClick}>Recargar Recetas</button>
+                <div className='search-container'>
+                    <input type='text' placeholder='Buscar recetas por nombre' />
+                    <button>Buscar</button>
+                </div>
+                <select name='' id=''>
+                    <option value='asc'>Ascendente</option>
+                    <option value='desc'>Descendente</option>
+                </select>
+                <select onChange={handleFilteredByDiet} name='' id=''>
+                    <option value='all'>Todos</option>
+                    <option value='gluten free'>gluten free</option>
+                    <option value='ketogenic'>ketogenic</option>
+                    <option value='vegetarian'>vegetarian</option>
+                    {/* <option value='ovo-vegetarian'>ovo-vegetarian</option> */}
+                    {/* <option value='lacto-vegetarian'>lacto-vegetarian</option> */}
+                    <option value='vegan'>vegan</option>
+                    <option value='pescetarian'>pescetarian</option>
+                    <option value='paleo'>paleo</option>
+                    <option value='primal'>primal</option>
+                    <option value='low fodmap'>low fodmap</option>
+                    <option value='whole30'>whole30</option>
+                    <option value='dairy free'>dairy free</option>
+                    <option value='lacto ovo vegetarian'>lacto ovo vegetarian</option>
+                    <option value='paleolithic'>paleolithic</option>
+                    <option value='primal'>primal</option>
+                </select>
+                <Link to='/recipe'>Crear Receta</Link>
             </div>
-            <select name='' id=''>
-                <option value='asc'>Ascendente</option>
-                <option value='desc'>Descendente</option>
-            </select>
-            <select name='' id=''>
-                <option value='vegan'>Vegana</option>
-                <option value='ovo'>Ovo Lacteo Vegetariana</option>
-                <option value='celiac'>Celiaca</option>
-            </select>
-            <Link to='/recipe'>Crear Receta</Link>
 
             {/* Renderiza las recetas */}
             <div>
@@ -87,7 +109,10 @@ const Home = () => {
                                 <Card
                                     image={recipe.image}
                                     recipe_name={recipe.recipe_name}
-                                    diets={recipe.diets}
+                                    diets= {recipe.diets}
+                                    // diets={(recipe.type_of_diets) ? recipe.type_of_diets.map((d) => {
+                                    //     return d.type_of_diet_name
+                                    // }) : recipe.diets}
                                 />
                             </div>
                         );
@@ -95,8 +120,8 @@ const Home = () => {
                 )}
             </div>
 
-            {/* Cuando no carga por alguna razón las recetas, muestro mensaje 
-            ARREGLAR, muestra el mensaje aunque todavía aun cuando esta esperando la respuesta */}
+            {/* Cuando no carga por alguna razón las recetas, muestro mensaje.
+            ¡ARREGLAR¡, muestra el mensaje aunque todavía aun cuando esta esperando la respuesta */}
             {!allRecipes.length ? (
                 <h4>
                     ¡Opss!, no hay recetas para mostrar esta vez, quizás la
@@ -104,6 +129,8 @@ const Home = () => {
                 </h4>
             ) : null}
 
+            {/* ARREGLAR Paginación. Cuando estoy en una pagina ultima, y pongo una dieta que tiene 
+            menos recetas no me actualiza las paginas*/}
             <nav>
                 <Paginated
                     allRecipes={allRecipes.length}
