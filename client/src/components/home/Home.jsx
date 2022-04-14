@@ -28,7 +28,8 @@ const Home = () => {
     // Se trae en la constante todo lo que esta en el estado de recipes
     // El useSelector se usa para
     // allRecipes = [{receta1}, {receta2}, {receta3}]
-    const allRecipes = useSelector((state) => state.recipes);
+    const allRecipes = useSelector((state) => state.filteredRecipes);
+    // Para renderizar cuando se seleccione el ordenamiento alfabetico
     const [order, setOrder] = useState('ascending');
     // Se crea la paginación de 9 recetas por pagina
     // Para renderizar cuando modifique el estado
@@ -55,15 +56,18 @@ const Home = () => {
     }, []);
 
     function handleFilteredByDiet(event) {
+        const diet = event.target.value;
         event.preventDefault();
-        dispatch(filterByDiet(event.target.value))
+        dispatch(filterByDiet(diet))
+        setCurrentPage(1);
     }
 
     function handleOrderAlphabetically(event) {
+        const order = event.target.value;
         event.preventDefault();
-        dispatch(orderAlphabetically(event.target.value))
+        dispatch(orderAlphabetically(order))
         setCurrentPage(1);
-        setOrder(`Ordenado ${event.target.value}`)
+        setOrder(`Ordenado ${order}`)
     }
 
     // Recargamos las recipes cuando con el botón
