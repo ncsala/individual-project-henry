@@ -42,3 +42,15 @@ export function orderAlphabetically(ascendingOrDescending) {
         payload: ascendingOrDescending,
     }
 }
+
+export function searchRecipesByName(name) {
+    return async function (dispatch) {
+        const response = await fetch(`${localHost}/recipes/search/${name}`);
+        const recipes = await response.json();
+
+        return dispatch({
+            type: GET_RECIPES,
+            payload: recipes,
+        });
+    }
+}

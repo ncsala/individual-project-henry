@@ -9,3 +9,10 @@ let obj = {
         }
     ],
 }
+
+
+// let otros = ['anidado', 'zorro', 'boniato', 'zanahoria', 'anibal']
+let letra1 = 'z'
+let letra2 = 'a'
+
+console.log(letra1.localeCompare(letra2))

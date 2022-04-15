@@ -8,13 +8,13 @@ import {
 // allRecipes es como un auxiliar con todas las recetas para no perderlas
 const initialState = {
 	filteredRecipes: [],
-	allRecipes: [], // Propiedad auxiliar 
+	allRecipes: [], // Propiedad auxiliar
 };
 
 const rootReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case GET_RECIPES:
-            // Seteo las dos propiedades con todas las recetas
+			// Seteo las dos propiedades con todas las recetas
 			return {
 				...state,
 				filteredRecipes: action.payload,
@@ -23,7 +23,7 @@ const rootReducer = (state = initialState, action) => {
 
 		case FILTER_BY_DIET:
 			// Filtro las recetas que contengan la dieta ingresada por el usuario
-			const recipesByDiet = state.allRecipes.filter((recipe) =>
+			const recipesByDiet = state.allRecipes?.filter((recipe) =>
 				recipe.diets
 					?.map((diet) => diet.toLowerCase())
 					.includes(action.payload.toLowerCase())
@@ -37,43 +37,24 @@ const rootReducer = (state = initialState, action) => {
 			};
 
 		case ORDER_BY_ALPHABET:
-            // Ordeno alfabéticamente sobre las recetas que ya están filtradas
-            const orderedRecipes = state.filteredRecipes.sort((a, b) => {
-                if (action.payload === 'ascending') {
-                    return a.recipe_name.localeCompare(b.recipe_name);
-                } else {
-                    return b.recipe_name.localeCompare(a.recipe_name);
-                }
-            });
-            return {
-                ...state,
-                filteredRecipes: orderedRecipes,
-            };
+			// Si viene un flag de orden ascendente o descendente
+			// Ordeno alfabéticamente sobre las recetas que ya están filtradas
+			const orderedRecipes = state.filteredRecipes?.sort((a, b) => {
+				const recipeA = a.recipe_name?.toLowerCase();
+				const recipeB = b.recipe_name?.toLowerCase();
 
-			// let orderedRecipes = state.filteredRecipes;
+                // localeCompare es una función de javascript que compara dos strings y devuelve un número 0,-1 o 1 dependiendo de si son iguales, menor o mayor
+				if (action.payload === 'ascending')
+					return recipeA.localeCompare(recipeB);
+				if (action.payload === 'descending')
+					return recipeB.localeCompare(recipeA);
+			});
 
-			// if (action.payload === 'ascending') {
-			// 	orderedRecipes = orderedRecipes.sort(function (a, b) {
-			// 		if (a.recipe_name > b.recipe_name) return 1;
-			// 		if (b.recipe_name > a.recipe_name) return -1;
-			// 		return 0;
-			// 	});
-			// }
-			// if (action.payload === 'descending') {
-			// 	orderedRecipes = orderedRecipes.sort(function (a, b) {
-			// 		if (a.recipe_name > b.recipe_name) return -1;
-			// 		if (b.recipe_name > a.recipe_name) return 1;
-			// 		return 0;
-			// 	});
-			// }
-
-			// return {
-			// 	...state,
-			// 	filteredRecipes: orderedRecipes,
-			// };
+			// Si no viene flag de orden ascendente o descendente devuelve el estado que tenia
+			return { ...state, filteredRecipes: orderedRecipes };
 
 		default:
-			return { ...state };
+			return state;
 	}
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Importacion de Hooks
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
@@ -25,12 +25,15 @@ const RECIPES_PER_PAGE = 9;
 // Paginado para ir buscando y mostrando las siguientes recetas, 9 recetas por pagina, mostrando las primeros 9 en la primer pagina.
 const Home = () => {
     const dispatch = useDispatch();
+
     // Se trae en la constante todo lo que esta en el estado de recipes
-    // El useSelector se usa para
+    // El useSelector se usa para traer datos del estado
     // allRecipes = [{receta1}, {receta2}, {receta3}]
     const allRecipes = useSelector((state) => state.filteredRecipes);
+
     // Para renderizar cuando se seleccione el ordenamiento alfabetico
     const [order, setOrder] = useState('ascending');
+
     // Se crea la paginación de 9 recetas por pagina
     // Para renderizar cuando modifique el estado
     const [currentPage, setCurrentPage] = useState(1);
@@ -55,16 +58,28 @@ const Home = () => {
         dispatch(getRecipes());
     }, []);
 
+    // useEffect(() => {
+    //     setTimeout(() => {
+    //         dispatch(orderAlphabetically('descending'));
+    //         console.log('Esto es una prueba')
+    //     }, 5000);
+    //     setCurrentPage(1);
+    // }, [])
+
+    const referencia = useRef();
+    
     function handleFilteredByDiet(event) {
         const diet = event.target.value;
+        const order = referencia.current.value
         event.preventDefault();
         dispatch(filterByDiet(diet))
+        dispatch(orderAlphabetically(order))
         setCurrentPage(1);
     }
 
     function handleOrderAlphabetically(event) {
         const order = event.target.value;
-        event.preventDefault();
+        // event.preventDefault();
         dispatch(orderAlphabetically(order))
         setCurrentPage(1);
         setOrder(`Ordenado ${order}`)
@@ -85,7 +100,7 @@ const Home = () => {
                     <input type='text' placeholder='Buscar recetas por nombre' />
                     <button>Buscar</button>
                 </div>
-                <select onChange={handleOrderAlphabetically}name='' id=''>
+                <select ref={referencia} onChange={handleOrderAlphabetically} name='' id=''>
                     <option value='ascending'>Ascendente</option>
                     <option value='descending'>Descendente</option>
                 </select>
@@ -121,10 +136,10 @@ const Home = () => {
                                 <Card
                                     image={recipe.image}
                                     recipe_name={recipe.recipe_name}
-                                    diets= {recipe.diets}
-                                    // diets={(recipe.type_of_diets) ? recipe.type_of_diets.map((d) => {
-                                    //     return d.type_of_diet_name
-                                    // }) : recipe.diets}
+                                    diets={recipe.diets}
+                                // diets={(recipe.type_of_diets) ? recipe.type_of_diets.map((d) => {
+                                //     return d.type_of_diet_name
+                                // }) : recipe.diets}
                                 />
                             </div>
                         );
