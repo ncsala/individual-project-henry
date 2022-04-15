@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Router } = require('express');
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY1
+const apiKey = process.env.API_KEY3
 const { Recipe, Type_of_diet } = require('../db');
 
 // Importar todos los routers;
@@ -107,7 +107,6 @@ const getDbRecipes = async () => {
 const getBdAndApiRecipes = async () => {
 	const apiRecipes = await getApiRecipes();
 	const dbRecipes = await getDbRecipes();
-	console.log(dbRecipes);
 
 	const allRecipes = [...apiRecipes, ...dbRecipes];
 	// const allRecipes = apiRecipes.concat(dbRecipes);
