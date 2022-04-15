@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Router } = require('express');
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY5;
+const apiKey = process.env.API_KEY1
 const { Recipe, Type_of_diet } = require('../db');
 
 // Importar todos los routers;
@@ -16,14 +16,15 @@ const router = Router();
 const getApiRecipes = async () => {
 	// Se obtiene la información de la API
 	const response = await fetch(
-		`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=50&apiKey=${apiKey}`
+		`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=15&apiKey=${apiKey}`
 	);
 
-    // Se convierte la respuesta de un objeto JSON a un objeto de JS
+	// Se convierte la respuesta de un objeto JSON a un objeto de JS
 	const data = await response.json();
 
 	// Se mapea solo los datos que se necesitan
-	const recipes = await data.results.map((recipe) => {
+	// recipes = [{receta1}, {receta2}, {receta3}]
+	const recipes = await data.results?.map((recipe) => {
 		return {
 			recipe_id: recipe.id,
 			recipe_name: recipe.title,
@@ -40,31 +41,76 @@ const getApiRecipes = async () => {
 		};
 	});
 
-	return recipes;
+	// Compruebo que venga algo en recipes para que no se rompa si la api no devuelve nada.
+	// Devuelvo string sino devuelve nada
+	return recipes ? recipes : [];
 };
 
 // Se obtiene la información de la BD
 // Trae todas las recetas de la BD y además incluye el modelo Type_of_diet
-// con el atributo type_of_diet_id y type_of_diet_name
+// con el atributo type_of_diet_name
+// Puse un try por si hay un error en la BD(?)
 const getDbRecipes = async () => {
-	return await Recipe.findAll({
-		include: {
-			model: Type_of_diet,
-			attributes: ['type_of_diet_name'],
-			through: {
-				attributes: [],
+	try {
+		const dbData = await Recipe.findAll({
+			include: {
+				model: Type_of_diet,
+				attributes: ['type_of_diet_name'],
+				through: {
+					attributes: [],
+				},
 			},
-		},
-	});
+		});
+
+		const recipes = await dbData.map((recipe) => {
+			return {
+				recipe_id: recipe.recipe_id,
+				recipe_name: recipe.recipe_name,
+				dish_description: recipe.dish_description,
+				score: recipe.score,
+				healthy_food_level: recipe.healthy_food_level,
+				step_by_step: recipe.step_by_step,
+                diets: recipe.type_of_diets.map((diet) => {
+                    return diet.type_of_diet_name
+                }),
+				image: recipe.image,
+				created_in_db: true,
+			};
+		});
+
+        return recipes;
+
+	} catch (error) {
+		// Si hay un error en la BD, se devuelve un array vacío y se loguea el error
+		console.error(error);
+		return [];
+	}
+
+	// try {
+	// 	return await Recipe.findAll({
+	// 		include: {
+	// 			model: Type_of_diet,
+	// 			attributes: ['type_of_diet_name'],
+	// 			through: {
+	// 				attributes: [],
+	// 			},
+	// 		},
+	// 	});
+	// } catch (error) {
+	// 	// Si hay un error en la BD, se devuelve un array vacío y se loguea el error
+	// 	console.error(error);
+	// 	return [];
+	// }
 };
 
 // Se concatena la información de la API con la de la BD
 const getBdAndApiRecipes = async () => {
 	const apiRecipes = await getApiRecipes();
 	const dbRecipes = await getDbRecipes();
+	console.log(dbRecipes);
 
 	const allRecipes = [...apiRecipes, ...dbRecipes];
-	// const apiBdRecipes = apiRecipes.concat(dbRecipes);
+	// const allRecipes = apiRecipes.concat(dbRecipes);
 
 	return allRecipes;
 };
@@ -96,8 +142,8 @@ router.get('/recipes', async (request, response) => {
 		if (!name) response.send(recipes);
 		// Si hay error capturarlo e informar que no se puede obtener la data
 	} catch (error) {
-		console.log(error);
 		response.status(500).send({
+			//CAMBIAR ERROR POR MENSAJE
 			message: error,
 		});
 	}
@@ -161,6 +207,10 @@ router.get('/types', async (request, response) => {
 				{ type_of_diet_name: 'primal' },
 				{ type_of_diet_name: 'low fodmap' },
 				{ type_of_diet_name: 'whole30' },
+				{ type_of_diet_name: 'dairy free' },
+				{ type_of_diet_name: 'lacto ovo vegetarian' },
+				{ type_of_diet_name: 'paleolithic' },
+				{ type_of_diet_name: 'primal' },
 			]);
 			response.json(types);
 		}
@@ -221,7 +271,6 @@ router.post('/recipe', async (request, response) => {
 			message: 'No se pudo crear la receta',
 		});
 	}
-
 });
 
 module.exports = router;
