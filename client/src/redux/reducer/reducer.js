@@ -33,27 +33,29 @@ const rootReducer = (state = initialState, action) => {
 			};
 
 		case SEARCH_BY_NAME:
-			// Si viene un nombre de receta
-			// Busco las recetas que coincidan con el nombre ingresado por el usuario
+            // Si se recibe el mensaje 'La receta que...' se modifica el estado agregando ese mensaje al messageError
 			if (action.payload.message === 'La receta que buscas se perdió en algún momento') {
 				return {
 					...state,
-					filteredRecipes: action.state.allRecipes,
 					msgError: action.payload.message,
 				};
 			}
 
+            // Si se manda un string vacío se modifica el estado eliminando el error y se renderizan todas las recetas
             if (action.payload === '') {
                 return {
                     ...state,
                     filteredRecipes: state.allRecipes,
+                    msgError: [],
                 };
             }
-            // if (action.payload.message === 'No se puede conectar a la base de datos') {
-            // }
+
+            // En caso de que ninguna de las dos se cumplan, es porque encontró la receta con ese nombre, por tanto también se elimina el error
+            // Se modifica el estado agregando la/s receta/s encontrada/s
 			return {
 				...state,
 				filteredRecipes: action.payload,
+                msgError: [],
 			};
 
 		case FILTER_BY_DIET:

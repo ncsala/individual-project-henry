@@ -32,12 +32,12 @@ const Home = () => {
     // El useSelector se usa para traer datos del estado
     // allRecipes = [{receta1}, {receta2}, {receta3}]
     const allRecipes = useSelector((state) => state.filteredRecipes);
+    // Se traen los errores del estado global
     const error = useSelector((state) => state.msgError
     );
 
-    // Para renderizar cuando se seleccione el ordenamiento alfabetico
-    const [order, setOrder] = useState('ascending');
-
+    
+    // PAGINACION ----------------------------------------------------------------------------------------------------
     // Se crea la paginación de 9 recetas por pagina
     // Para renderizar cuando modifique el estado
     const [currentPage, setCurrentPage] = useState(1);
@@ -46,33 +46,21 @@ const Home = () => {
     // Se crea un array con las recetas que se mostrarán en la página actual
     // Se corta el array de todas las recetas con los dos indices inicial y final de la página
     let currentRecipes = allRecipes ? allRecipes.slice(firstRecipeInPage, lastRecipeInPage) : [];
-    // const currentRecipes = allRecipes.slice(
-    //     firstRecipeInPage,
-    //     lastRecipeInPage
-    // );
-
     // Función para cambiar estado de acuerdo a la página seleccionada
     const paginated = (pageNumber) => {
         setCurrentPage(pageNumber);
     };
-
+    //---------------------------------------------------------------------------------------------------------------
+    
     // useEffect sirve para que el renderizado se realice una sola vez cuando se monta el componente
     // el segundo parámetro es un array vacío, porque no se quiere que se ejecute nuevamente el useEffect
     // cuando se cambie el estado de recipes
     useEffect(() => {
         dispatch(getRecipes());
     }, [dispatch]);
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         dispatch(orderAlphabetically('descending'));
-    //         console.log('Esto es una prueba')
-    //     }, 2000);
-    //     setCurrentPage(1);
-    // }, [dispatch])
-
+    
+    
     const referencia = useRef();
-
     function handleFilteredByDiet(event) {
         const diet = event.target.value;
         const order = referencia.current.value
@@ -81,7 +69,11 @@ const Home = () => {
         dispatch(orderAlphabetically(order))
         setCurrentPage(1);
     }
-
+ 
+    
+    
+    // Para renderizar cuando se seleccione el ordenamiento alfabetico
+    const [order, setOrder] = useState('ascending');
     function handleOrderAlphabetically(event) {
         const order = event.target.value;
         // event.preventDefault();
@@ -105,6 +97,7 @@ const Home = () => {
                 <section className='filters'>
                     <button onClick={handleClick}>Recargar Recetas</button>
                     <select ref={referencia} onChange={handleOrderAlphabetically} name='' id=''>
+                        {/* <option value='disorderly' disabled>Ordenar alfabéticamente</option> */}
                         <option value='ascending'>Ascendente</option>
                         <option value='descending'>Descendente</option>
                     </select>

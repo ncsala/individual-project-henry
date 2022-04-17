@@ -62,19 +62,19 @@ export function orderAlphabetically(ascendingOrDescending) {
 // Dispara acción para buscar recetas por nombre
 // Sino esta disponible receta, dispara error
 export function searchRecipesByName(name) {
-	// del back regreso con este objeto {message: 'La receta que buscas se perdió en algún momento'}
+	// Del back regreso con:
+	// Pueden ser las recetas, o con este objeto {message: 'La receta que buscas se perdió en algún momento'}
 
 	return async function (dispatch) {
 		try {
 			const response = await fetch(`${localHost}/recipes?name=${name}`);
 			const recipes = await response.json();
-
-            // pueden ser las recetas, o un mensaje de error 'La receta que buscas se perdió en algún momento'
 			return dispatch({
 				type: SEARCH_BY_NAME,
 				payload: recipes,
 			});
 		} catch (error) {
+			// Por si no esta levantado el backend
 			return dispatch({
 				type: GET_RECIPES,
 				payload: 'No se puede conectar a la base de datos',

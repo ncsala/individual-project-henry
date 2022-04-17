@@ -48,6 +48,9 @@
     /*  minmax -> minima y maxima cantidad de columnas */
     /* Si le pongo 1fr Lo va achicar hasta el mínimo que le hayas pasado como min para meter todas las columnas que pueda,
     cuando no pueda achicar más, va a tomar el valor que le hayas pasado como máximo*/
+    /*28% lo puse para que solo entren 3 columnas cuando esta en pantalla grande
+    , y el valor 16rem para que se pueda hacer mas chico
+    y entren dos columnas en pantallas un poco mas grandes que movil*/
     grid-template-columns:repeat(auto-fill, minmax(max(16.875rem,28%), 1fr));
 
     /* min elige el tamaño mínimo de las dos medidas */
