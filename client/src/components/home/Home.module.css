@@ -24,17 +24,74 @@
     /* backdrop-filter: blur(4px); */
     /* height: calc(195vh - 5rem); */
     /* width: 100vw; */
+}   
+
+.title_container {
+    /* height: calc(195vh - 5rem); */
+    /* width: 100vw; */
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
-.titulito {
+.title {
+    /* insertar texto nowrap; */
+    font-size: calc(1.5vw + 1vh + 1vmin);
+    white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.123);
+    border-radius: 0.5rem;
+    text-align: center;
+    backdrop-filter: blur(1rem);
+    -webkit-backdrop-filter: blur(1rem); 
+    width: 10em;
+    height: 2em; 
     margin: 0;
-    padding: 1rem;
+    padding: 0.5em;
+}
+
+.search_container {
+    /* height: calc(195vh - 5rem); */
+    /* width: 100vw; */
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .filters {
+    /* height: calc(195vh - 5rem); */
+    /* width: 100vw; */
+    margin-top: 1em;
+    margin-bottom: 1em;
     display: flex;
+    flex-direction: row;
+    justify-content: center;
     gap: 0.5em;
-    margin-bottom: 0.5em;
+}
+
+.load {
+        background-color: transparent;
+        border-radius: 50%;
+        border: 15px solid rgba(255, 255, 0, 0.432);
+        border-top-color: transparent ;
+        margin-left: 25rem;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
 }
 
 .recipes_container {
@@ -51,7 +108,7 @@
     /*28% lo puse para que solo entren 3 columnas cuando esta en pantalla grande
     , y el valor 16rem para que se pueda hacer mas chico
     y entren dos columnas en pantallas un poco mas grandes que movil*/
-    grid-template-columns:repeat(auto-fill, minmax(max(16.875rem,28%), 1fr));
+    grid-template-columns:repeat(auto-fill, minmax(max(16.875rem,20%), 1fr));
 
     /* min elige el tamaño mínimo de las dos medidas */
     /* grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); */
@@ -79,6 +136,11 @@
 }
 
 .paginated {
-    margin: 1rem 30%
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
 }
 

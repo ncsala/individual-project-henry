@@ -1,0 +1,180 @@
+/*Boton formulario----------------------------------------------------*/
+.contenedorBotones {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+}
+
+.contenedorBotones .contenedorBotones__boton {
+	position: relative;
+	padding: 1em 2em;
+	margin-top: 1em;
+	background-color: #d83863;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+	font-weight: 700;
+	text-transform: uppercase;
+	border-radius: 0.5em;
+	color: var(--primario);
+	background-color: transparent;
+	border: 2px solid var(--botones);
+	z-index: 0;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.contenedorBotones .contenedorBotones__boton:hover {
+	animation: sombra_pulso 1000ms 1;
+	background-color: var(--botones);
+	color: var(--cuatro);
+}
+
+.contenedorBotones .contenedorBotones__boton__widht100 {
+	width: 100%;
+}
+
+@media (min-width: 769px) {
+	/*cuando es mas de 769 pixeles se resetea y el boton se muestra mas chico. es para verlo grande en movil*/
+	.contenedorBotones .contenedorBotones__boton__widht100 {
+		width: auto;
+	}
+}
+
+/*animación de boton---------------------------------*/
+@keyframes sombra_pulso {
+	0% {
+		box-shadow: 0 0 0 0 var(--botonesSombraPulso);
+	}
+	100% {
+		box-shadow: 0 0 0.8em 1.6em #20e2d700;
+	}
+}
+
+/*Fin Efectos de botones --------------------------*/
+/*Fin Boton-----------------------------------------------*/
+
+/*FORMULARIO---------------------------------------------------------------*/
+.formulario {
+	opacity: 0.9;
+	background-color: #242121;
+	background-color: #263838;
+	background-color: #52503a;
+	background-color: #baeca5;
+	background-color: #6b8993;
+	background-color: var(--terciario);
+	width: min(60em, 100%);
+	margin: 0 auto;
+	padding: 1em;
+	border-radius: 1rem;
+}
+
+.formulario .formulario__fieldset {
+	border: none;
+	/*el textarea*/
+	/*para poner el formulario en tres columnas cuando es mas grande que 769 pixeles*/
+}
+
+.formulario .formulario__fieldset .formulario__legend {
+	text-align: center;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+	font-weight: 700;
+	color: var(--blanco);
+	text-transform: uppercase;
+	margin-bottom: 1em;
+}
+
+.formulario .formulario__fieldset .formulario__contenedorCampos__campo {
+	margin-bottom: 0.5em;
+}
+
+.formulario
+	.formulario__fieldset
+	.formulario__contenedorCampos__campo
+	.formulario__campo__label {
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+	font-weight: 700;
+	color: var(--primario);
+	margin-bottom: 0.2em;
+	display: block;
+}
+
+.formulario
+	.formulario__fieldset
+	.formulario__contenedorCampos__campo
+	.formulario__campo__inputTexto {
+	opacity: 1;
+	color: var(--primario);
+	background-color: #242121;
+	background-color: var(--cinco);
+	border-color: #242121;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+	font-weight: 400;
+	width: 100%;
+	border: none;
+	padding: 1em;
+	border-radius: 0.2em;
+}
+
+.formulario
+	.formulario__fieldset
+	.formulario__contenedorCampos__campo
+	.formulario__campo__inputTexto:focus {
+	outline: none;
+	border: 3px solid var(--secundario);
+	box-shadow: 0em 0em 2em var(--primario);
+}
+
+.formulario
+	.formulario__fieldset
+	.formulario__contenedorCampos__campo
+	.formulario__campo__select {
+	background-color: #f8c25c;
+}
+
+.formulario
+	.formulario__fieldset
+	.formulario__contenedorCampos__campo:nth-child(6) {
+	/* height: 20em; */
+	/* resize: none; */
+	grid-row: 3/4;
+	grid-column: 1/4;
+}
+
+.formulario__contenedorCampos__campo:nth-child(6)
+	.formulario__campo__inputTexto {
+	resize: none;
+	height: 15em;
+}
+/* .formulario
+	.formulario__fieldset
+	.formulario__contenedorCampos__campo:nth-child(7) {
+	grid-column: 1/4;
+} */
+
+.formulario__contenedorCampos__campo:nth-child(7) {
+	grid-row: 4/5;
+	grid-column: -4/-1;
+}
+
+.campo__checkbox {
+    display: grid;
+    grid-auto-rows: auto;
+    gap: 0.5em;   
+    grid-template-columns:repeat(auto-fill, minmax(max(10.875rem,20%), 1fr));
+}
+
+
+@media (min-width: 769px) {
+	.formulario .formulario__fieldset .formulario__contenedorCampos {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		/* grid-template-rows: auto auto 15em; */
+		column-gap: 1em;
+	}
+}
+
+/*fin formulario------------------------------------------------------------*/

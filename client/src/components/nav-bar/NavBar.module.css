@@ -2,14 +2,13 @@
 .header {
 	opacity: 0.9;
     width: 100%;
-	height: 3rem;
+	height: 6rem;
     /* background-color: #374957; */
     /* background-color:#96CEB4; */
 	/* background-color: var(--primario); */
-    background-color: #8cc63e;
-    background-color: #3a606e;
-    -webkit-box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 75%);
-    -moz-box-shadow: 3px 3px 5px 0px rgba(0,0,0,0.75);
+    /* background-color: #8cc63e;
+    background-color: #3a606e; */
+    background-color: var(--primario);
     box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 75%);
     /* position: sticky -> es mejor que usar 'position: fixed'.
     Es mejor practica. Porque sticky no se sale del flow del contenido, 
@@ -28,24 +27,22 @@
 	align-items: normal;
 }
 
-/* .header__nav__iconoHamb {
-    z-index: 110;
-} */
 
 /*enlaces páginas inicio */
 .links__ul{
-	position: fixed;
-	top: 0;
-	right: 0;
-	width: 100%;
-	height: 100vh;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    transition: all 0.1s ease-out;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	list-style: none;
-	transition: all 0.5s ease-out; /*transicion cuando se despliega menu hamburguesa*/
-	background-color: var(--primario);
+	transition: all 0.5s ease-out; /*transición cuando se despliega menu hamburguesa*/
+	/* background-color: #3a606e; */
+    /* background-color: var(--primario); */
+
 }
 
 .links__a {
@@ -71,11 +68,7 @@
     .navbar {
         height: 5rem;
     }
-    /* .iconoHamb {
-        display: none;
-	} */
     
-    /*Para agrandar un poquito el header en pantalla grande*/
     .header {
         height: 5rem;
     }

@@ -3,7 +3,8 @@ import {
 	FILTER_BY_DIET,
 	ORDER_BY_ALPHABET,
 	SEARCH_BY_NAME,
-	POST_RECIPE,
+    CREATE_RECIPE,
+    GET_DIETS,
 } from '../actions/actions.js';
 
 // Básicamente estoy tomando y renderizando el estado cuando cambia filteredRecipes
@@ -11,6 +12,7 @@ import {
 const initialState = {
 	filteredRecipes: [],
 	allRecipes: [], // Propiedad auxiliar
+    allDiets: [],
 	msgError: [],
 };
 
@@ -30,6 +32,7 @@ const rootReducer = (state = initialState, action) => {
 				...state,
 				allRecipes: action.payload,
 				filteredRecipes: action.payload,
+                msgError: [],
 			};
 
 		case SEARCH_BY_NAME:
@@ -90,11 +93,39 @@ const rootReducer = (state = initialState, action) => {
 			// Si no viene flag de orden ascendente o descendente devuelve el estado que tenia
 			return { ...state, filteredRecipes: orderedRecipes };
 
-		case POST_RECIPE:
+		case CREATE_RECIPE:
 			return {
 				...state,
 				allRecipes: [...state.allRecipes, action.payload],
 			};
+
+        case CREATE_RECIPE:
+            if (action.payload === 'No se puede conectar a la base de datos') {
+                return {
+                    ...state,
+                    msgError: action.payload,
+                };
+            }
+            return {
+                ...state,
+                msgError: [],
+            };
+
+        case GET_DIETS: {
+            if(action.payload === 'No se puede conectar a la base de datos') {
+                return {
+                    ...state,
+                    allDiets: [],
+                    msgError: action.payload,
+                };
+            }
+
+            return {
+                ...state,
+                allDiets: action.payload,
+                msgError: [],
+            };
+        }
 
 		default:
 			return state;

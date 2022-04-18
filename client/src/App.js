@@ -8,6 +8,7 @@ import { Route, Routes, useParams } from 'react-router-dom';
 import LandingPage from './components/landing/LandingPage';
 import Home from './components/home/Home';
 import NavBar from 'components/nav-bar/NavBar';
+import CreateRecipe from 'components/create-recipe/CreateRecipe';
 
 import './App.css';
 
@@ -22,6 +23,7 @@ function App() {
 				<Route path='/recipes' element={<Home />} />
 				{/* <Route path='/recipe'></Route> */}
 				<Route path='/recipes/:id' />
+				<Route path='/recipe' element={<CreateRecipe />} />
 				{/* Este es un 404 soft */}
 				{/* En realidad para devolver un 404 hay q hacerlo desde el servidor */}
 				<Route path='*' element={<h1>404 Not Found</h1>} />
