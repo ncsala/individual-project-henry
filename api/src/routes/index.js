@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Router } = require('express');
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY3
+const apiKey = process.env.API_KEY1
 const { Recipe, Type_of_diet } = require('../db');
 
 // Importar todos los routers;
@@ -227,6 +227,7 @@ router.get('/types', async (request, response) => {
 // Recibe los datos recolectados desde el formulario controlado de la ruta de creación de recetas por body
 // Crea una receta en la base de datos
 router.post('/recipe', async (request, response) => {
+    console.log(request.body);
 	try {
 		// Se desestructura el body de la request
 		const {
