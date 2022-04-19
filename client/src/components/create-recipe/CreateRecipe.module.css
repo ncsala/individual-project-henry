@@ -9,7 +9,7 @@
 .contenedorBotones .contenedorBotones__boton {
 	position: relative;
 	padding: 1em 2em;
-	margin-top: 1em;
+	margin-top: 0.7em;
 	background-color: #d83863;
 	font-family: 'PT Sans', sans-serif;
 	font-size: 1em;
@@ -64,7 +64,8 @@
 	background-color: #6b8993;
 	background-color: var(--terciario);
 	width: min(60em, 100%);
-	margin: 0 auto;
+	margin: 1.8em auto;
+    box-shadow: 3px 3px 5px 0px rgb(0 0 0 / 75%);
 	padding: 1em;
 	border-radius: 1rem;
 }
@@ -78,7 +79,7 @@
 .formulario .formulario__fieldset .formulario__legend {
 	text-align: center;
 	font-family: 'PT Sans', sans-serif;
-	font-size: 1em;
+	font-size: 0.65em;
 	font-weight: 700;
 	color: var(--blanco);
 	text-transform: uppercase;
@@ -147,7 +148,7 @@
 .formulario__contenedorCampos__campo:nth-child(6)
 	.formulario__campo__inputTexto {
 	resize: none;
-	height: 15em;
+	height: 13em;
 }
 /* .formulario
 	.formulario__fieldset
@@ -167,6 +168,9 @@
     grid-template-columns:repeat(auto-fill, minmax(max(10.875rem,20%), 1fr));
 }
 
+/* .campo__checkbox, label {
+    display: inline-block;
+} */
 
 @media (min-width: 769px) {
 	.formulario .formulario__fieldset .formulario__contenedorCampos {

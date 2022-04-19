@@ -113,7 +113,7 @@ export function searchRecipesByName(name) {
 export function createRecipe(recipe) {
 	return async function (dispatch) {
 		try {
-			const response = await fetch(`${localHost}/recipes`, {
+			const response = await fetch(`${localHost}/recipe`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
