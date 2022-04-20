@@ -1,16 +1,16 @@
-require('dotenv').config();
 const { Router } = require('express');
+
+require('dotenv').config();
 const fetch = require('node-fetch');
 const apiKey = process.env.API_KEY1
-const { Recipe, Type_of_diet } = require('../db');
 
-// Importar todos los routers;
-// Ejemplo: const authRouter = require('./auth.js');
+// Se traen los modelos de la base de datos
+const { Recipe, Type_of_diet } = require('../db');
+const createRecipe = require('./createRecipe');
 
 const router = Router();
 
-// Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
+router.use('/recipe', createRecipe)
 
 // Se obtiene la información de la API
 const getApiRecipes = async () => {
@@ -42,7 +42,7 @@ const getApiRecipes = async () => {
 	});
 
 	// Compruebo que venga algo en recipes para que no se rompa si la api no devuelve nada.
-	// Devuelvo string sino devuelve nada
+	// Devuelvo array sino devuelve nada
 	return recipes ? recipes : [];
 };
 
@@ -62,6 +62,7 @@ const getDbRecipes = async () => {
 			},
 		});
 
+        // Formatear la información que se trae de la base de datos
 		const recipes = await dbData.map((recipe) => {
 			return {
 				recipe_id: recipe.recipe_id,
@@ -160,17 +161,17 @@ router.get('/recipes/:id', async (request, response) => {
 		const recipes = await getBdAndApiRecipes();
 		if (id) {
 			// Se filtra la receta que coincida con el id de la request
-			const filteredRecipes = recipes.filter(
+			const filteredRecipe = recipes.filter(
 				(recipe) => recipe.recipe_id === parseInt(id)
 			);
 			// Si no existe ninguna receta con ese id mostrar un mensaje adecuado
-			if (!filteredRecipes.length) {
+			if (!filteredRecipe.length) {
 				response.status(404).json({
 					message: 'La receta que buscas se perdió en algún momento',
 				});
 			}
 			// Si existe alguna receta mostrarla
-			if (filteredRecipes.length) response.json(filteredRecipes);
+			if (filteredRecipe.length) response.json(filteredRecipe);
 		}
 		// Si no viene ningún id de params mostrar todas las recetas
 		if (!id) response.send(recipes);
@@ -219,56 +220,6 @@ router.get('/types', async (request, response) => {
 		// Si hay error capturarlo e informar que no se puede obtener la data
 		response.status(500).send({
 			message: 'No se pudo obtener la información solicitada',
-		});
-	}
-});
-
-// POST /recipe:
-// Recibe los datos recolectados desde el formulario controlado de la ruta de creación de recetas por body
-// Crea una receta en la base de datos
-router.post('/recipe', async (request, response) => {
-    console.log(request.body);
-	try {
-		// Se desestructura el body de la request
-		const {
-			recipe_name,
-			dish_description,
-			score,
-			healthy_food_level,
-			step_by_step,
-			image,
-			created_in_db,
-			diets,
-		} = request.body;
-		// Se crea una nueva receta en la base de datos
-		const newRecipe = await Recipe.create({
-			recipe_name,
-			dish_description,
-			score,
-			healthy_food_level,
-			step_by_step,
-			image,
-			created_in_db,
-		});
-
-		// Se traen los tipos de dieta de la base de datos
-		// que coincidan con los que se reciben en la request por body
-		const dietTypeDb = await Type_of_diet.findAll({
-			where: { type_of_diet_name: diets },
-		});
-
-		newRecipe.addType_of_diet(dietTypeDb);
-
-		// Si se crea correctamente la receta se muestra el mensaje de éxito
-		if (newRecipe) {
-			response.status(201).json({
-				message: 'Receta creada correctamente',
-			});
-		}
-	} catch (error) {
-		// Si hay error capturarlo e informar que no se puede obtener la data
-		response.status(500).send({
-			message: 'No se pudo crear la receta',
 		});
 	}
 });
