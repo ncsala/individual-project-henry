@@ -51,10 +51,15 @@ const CreateRecipe = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        dispatch(createRecipe(recipe));
-        alert('Su receta ha sido creada con éxito!')
-        // Para resetear el formulario y limpiar los checkboxes
-        cleanForm(event.target)
+        if (!errors.recipe_name && !errors.dish_description) {
+            dispatch(createRecipe(recipe))
+            alert('Su receta ha sido creada con éxito!')
+            // DEBERÍA VERIFICAR DESDE EL BACK SI REALMENTE FUE CREADA
+            // Para resetear el formulario y limpiar los checkboxes
+            cleanForm(event.target)
+        } else {
+            alert('Por favor, revise los errores en el formulario')
+        }
     }
 
     const cleanForm = (target) => {
@@ -84,6 +89,7 @@ const CreateRecipe = () => {
                     <legend class={styles.formulario__legend}><h1>Crea una nueva receta llenando todos los campos</h1></legend>
                     <div class={styles.formulario__contenedorCampos}>
 
+                        {/* Nombre de receta */}
                         <div class={styles.formulario__contenedorCampos__campo}>
                             <label class={styles.formulario__campo__label}
                                 for="recipe_name">
@@ -97,6 +103,8 @@ const CreateRecipe = () => {
                                 class={styles.formulario__campo__inputTexto}
                                 placeholder="Ingrese nombre de la receta"
                                 required
+                                minLength="3"
+                                maxLength="100"
                             />
                             {
                                 errors.recipe_name && <span class={styles.error}>{errors.recipe_name}</span>
@@ -117,6 +125,8 @@ const CreateRecipe = () => {
                                 class={styles.formulario__campo__inputTexto}
                                 placeholder="Ingrese una breve descripción de la receta"
                                 required
+                                minLength="8"
+                                maxLength="100"
                             />
                             {
                                 errors.dish_description && <p class={styles.error}>{errors.dish_description}</p>
@@ -176,6 +186,8 @@ const CreateRecipe = () => {
                                 value={recipe.image}
                                 class={styles.formulario__campo__inputTexto}
                                 placeholder="Ingrese un ULR válido de la imagen"
+                                minLength="10"  
+                                maxLength="500"
                             />
                             {errors.image && <p class={styles.error}>{errors.image}</p>}
                         </div>
@@ -203,7 +215,7 @@ const CreateRecipe = () => {
                                 allDiets.length > 0 && allDiets.map(diet => (
                                     <div key={diet.id}>
                                         <label className={styles.formulario__campo__label} htmlFor="diets">{diet.type_of_diet_name}
-                                            <input onChange={handleCheckbox} type="checkbox" value={diet.id} name="diets" />
+                                            <input onChange={handleCheckbox} type="checkbox" value={diet.type_of_diet_name} name="diets" />
                                         </label>
                                     </div>
                                 ))
@@ -213,7 +225,7 @@ const CreateRecipe = () => {
                     </div>
 
                     <div class={styles.contenedorBotones}>
-                        <button class={`${styles.contenedorBotones__boton} ${styles.contenedorBotones__boton__widht100}`} type="submit">Enviar</button>
+                        <button class={`${styles.contenedorBotones__boton} ${styles.contenedorBotones__boton__widht100}`} type="submit" >Enviar</button>
                     </div>
                 </fieldset>
             </form>

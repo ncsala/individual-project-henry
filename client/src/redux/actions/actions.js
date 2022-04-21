@@ -3,7 +3,9 @@ export const GET_RECIPES = 'GET_RECIPES',
 	ORDER_BY_ALPHABET = 'ORDER_BY_ALPHABET',
 	SEARCH_BY_NAME = 'SEARCH_BY_NAME',
 	CREATE_RECIPE = 'CREATE_RECIPE',
-	GET_DIETS = 'GET_DIETS';
+	GET_DIETS = 'GET_DIETS',
+    GET_DETAIL = 'GET_DETAIL',
+    SHOW_ERRORS = 'SHOW_ERRORS'
 
 export const localHost = 'http://localhost:3001';
 
@@ -22,7 +24,7 @@ export function getRecipes() {
 			.catch((error) => {
 				console.log(error);
 				return dispatch({
-					type: GET_RECIPES,
+					type: SHOW_ERRORS,
 					payload: 'No se puede conectar a la base de datos',
 				});
 			});
@@ -81,7 +83,7 @@ export function searchRecipesByName(name) {
 		} catch (error) {
 			// Por si no esta levantado el backend
 			return dispatch({
-				type: GET_RECIPES,
+				type: SHOW_ERRORS,
 				payload: 'No se puede conectar a la base de datos',
 			});
 		}
@@ -133,7 +135,7 @@ export function createRecipe(recipe) {
 }
 
 export function getDiets() {
-	return async function (dispatch) {
+	return function (dispatch) {
 		fetch(`${localHost}/types`)
 			.then((response) => response.json())
 			.then((allDiets) => {
@@ -149,4 +151,26 @@ export function getDiets() {
 				});
 			});
 	};
+}
+
+export function getDetail(id) {
+    return async function (dispatch) {
+        try {
+            const response = await fetch(`${localHost}/recipes/${id}`)
+            const detail = await response.json();
+
+            return dispatch({
+                type: GET_DETAIL,
+                payload: detail,
+            })
+        } catch (error) {
+            return dispatch({
+                type: SHOW_ERRORS,
+                payload: 'No se puede conectar a la base de datos',
+            })
+        }
+
+
+
+    }
 }

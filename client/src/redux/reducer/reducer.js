@@ -3,8 +3,10 @@ import {
 	FILTER_BY_DIET,
 	ORDER_BY_ALPHABET,
 	SEARCH_BY_NAME,
-    CREATE_RECIPE,
-    GET_DIETS,
+	CREATE_RECIPE,
+	GET_DIETS,
+	GET_DETAIL,
+	SHOW_ERRORS,
 } from '../actions/actions.js';
 
 // Básicamente estoy tomando y renderizando el estado cuando cambia filteredRecipes
@@ -12,53 +14,56 @@ import {
 const initialState = {
 	filteredRecipes: [],
 	allRecipes: [], // Propiedad auxiliar
-    allDiets: [],
+    recipeDetails:[],
+	allDiets: [],
 	msgError: [],
 };
 
 const rootReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case GET_RECIPES:
-			if (action.payload === 'No se puede conectar a la base de datos') {
-				return {
-					...state,
-					allRecipes: [],
-					filteredRecipes: [],
-					msgError: action.payload,
-				};
-			}
-
+			// if (action.payload === 'No se puede conectar a la base de datos') {
+			// 	return {
+			// 		...state,
+			// 		allRecipes: [],
+			// 		filteredRecipes: [],
+			// 		msgError: action.payload,
+			// 	};
+			// }
 			return {
 				...state,
 				allRecipes: action.payload,
 				filteredRecipes: action.payload,
-                msgError: [],
+				msgError: [],
 			};
 
 		case SEARCH_BY_NAME:
-            // Si se recibe el mensaje 'La receta que...' se modifica el estado agregando ese mensaje al messageError
-			if (action.payload.message === 'La receta que buscas se perdió en algún momento') {
+			// Si se recibe el mensaje 'La receta que...' se modifica el estado agregando ese mensaje al messageError
+			if (
+				action.payload.message ===
+				'La receta que buscas se perdió en algún momento'
+			) {
 				return {
 					...state,
 					msgError: action.payload.message,
 				};
 			}
 
-            // Si se manda un string vacío se modifica el estado eliminando el error y se renderizan todas las recetas
-            if (action.payload === '') {
-                return {
-                    ...state,
-                    filteredRecipes: state.allRecipes,
-                    msgError: [],
-                };
-            }
+			// Si se manda un string vacío se modifica el estado eliminando el error y se renderizan todas las recetas
+			if (action.payload === '') {
+				return {
+					...state,
+					filteredRecipes: state.allRecipes,
+					msgError: [],
+				};
+			}
 
-            // En caso de que ninguna de las dos se cumplan, es porque encontró la receta con ese nombre, por tanto también se elimina el error
-            // Se modifica el estado agregando la/s receta/s encontrada/s
+			// En caso de que ninguna de las dos se cumplan, es porque encontró la receta con ese nombre, por tanto también se elimina el error
+			// Se modifica el estado agregando la/s receta/s encontrada/s
 			return {
 				...state,
 				filteredRecipes: action.payload,
-                msgError: [],
+				msgError: [],
 			};
 
 		case FILTER_BY_DIET:
@@ -94,38 +99,51 @@ const rootReducer = (state = initialState, action) => {
 			return { ...state, filteredRecipes: orderedRecipes };
 
 		case CREATE_RECIPE:
+			if (action.payload === 'No se puede conectar a la base de datos')
+				return {
+					...state,
+					msgError: action.payload,
+				};
+
 			return {
 				...state,
-				allRecipes: [...state.allRecipes, action.payload],
+				msgError: [],
 			};
 
-        case CREATE_RECIPE:
-            if (action.payload === 'No se puede conectar a la base de datos') {
-                return {
-                    ...state,
-                    msgError: action.payload,
-                };
-            }
-            return {
-                ...state,
-                msgError: [],
-            };
+		case GET_DIETS: {
+			if (action.payload === 'No se puede conectar a la base de datos') {
+				return {
+					...state,
+					allDiets: [],
+					msgError: action.payload,
+				};
+			}
 
-        case GET_DIETS: {
-            if(action.payload === 'No se puede conectar a la base de datos') {
-                return {
-                    ...state,
-                    allDiets: [],
-                    msgError: action.payload,
-                };
-            }
+			return {
+				...state,
+				allDiets: action.payload,
+				msgError: [],
+			};
+		}
 
-            return {
-                ...state,
-                allDiets: action.payload,
-                msgError: [],
-            };
-        }
+		case SHOW_ERRORS:
+			if (action.payload === 'No se puede conectar a la base de datos') {
+				return {
+					...state,
+					allRecipes: [],
+					filteredRecipes: [],
+					msgError: action.payload,
+				};
+			}
+            return ({
+                ...state
+            })
+
+		case GET_DETAIL:
+			return {
+				...state,
+                recipeDetails: action.payload,
+			};
 
 		default:
 			return state;
