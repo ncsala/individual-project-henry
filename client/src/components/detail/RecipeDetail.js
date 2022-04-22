@@ -3,21 +3,22 @@ import { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import defaultRecipeImg from '../../assets/cooking.png';
 import { getDetail } from 'redux/actions/actions';
+import PrintsImage from 'components/prints-image/PrintsImage';
+
+import styles from './RecipeDetail.module.css';
 
 const RecipeDetail = (props) => {
 	const dispatch = useDispatch();
 	const recipeDetail = useSelector((state) => state.recipeDetails);
 	const { id } = useParams();
 
-    console.log(recipeDetail)
-
 	useEffect(() => {
 		dispatch(getDetail(id));
 	}, [dispatch, id]);
 
 	console.log(recipeDetail);
+
 	return (
 		<>
 			<div>
@@ -27,32 +28,62 @@ const RecipeDetail = (props) => {
 			{recipeDetail.length > 0 ? (
 				recipeDetail.map((recipeDetail) => {
 					return (
-						<div key={recipeDetail.recipe_id}>
+						<section
+							key={recipeDetail.recipe_id}
+							class={styles.container}
+						>
 							<h2>{recipeDetail.recipe_name}</h2>
-							<h3>{recipeDetail.dish_description}</h3>
-							<h4>Score: {recipeDetail.score}</h4>
-							<h4>Healthy Food Level: {recipeDetail.healthy_food_level}</h4>
-							{/* <p>{recipeDetail.step_by_step}</p> */}
-							{!recipeDetail.image ? (
-								<img
-									src={defaultRecipeImg}
-									alt='Imagen predeterminada'
-								/>
+							{/* <p>Resumen: {recipeDetail.dish_description.replace(/<\/?[^>]+(>|$)/g, "")}</p> */}
+
+							<p
+								dangerouslySetInnerHTML={{
+									__html: `${recipeDetail.dish_description}`,
+								}}
+							></p>
+
+							<h4>Puntuación: {recipeDetail.score}</h4>
+							<h4>
+								Nivel de comida saludable:{' '}
+								{recipeDetail.healthy_food_level}
+							</h4>
+
+							{Object.prototype.toString.call(
+								recipeDetail.step_by_step
+							) === '[object Object]' ? (
+								recipeDetail.step_by_step.steps.map((step) => {
+									return (
+										<li key={step.number}>
+											Paso {step.number}: {step.step}
+										</li>
+									);
+								})
 							) : (
-								<img
-									src={recipeDetail.image}
-									alt={
-										'Imagen receta de ' +
-										recipeDetail.recipe_name
-									}
-								/>
+								<p>{recipeDetail.step_by_step}</p>
 							)}
+
+							{/* {recipeDetail.created_in_db === true ? (
+								<p>{recipeDetail.step_by_step}</p>
+							) : (
+								recipeDetail.step_by_step.steps?.map((step) => {
+									return (
+										<li key={step.number}>
+											Paso: {step.number}: {step.step}
+										</li>
+									);
+								})
+							)} */}
+
+							<PrintsImage
+								image={recipeDetail.image}
+								name={recipeDetail.recipe_name}
+							/>
+
 							<h4>Diets: {recipeDetail.diets}</h4>
-						</div>
+						</section>
 					);
 				})
 			) : (
-				<div>Cargando...</div>
+				<span>Cargando...</span>
 			)}
 		</>
 	);

@@ -1,14 +1,4 @@
 .main_home {
-    /* height: minmax(100vh, 200vh);
-    backdrop-filter: blur(4px); */
-    /* height: calc(450vh - 5rem);
-    width: 100vw;
-    /* background-image: url(assets/2.jpg); */
-    /* background-image: url(assets/8.jpg); */
-    /* background-image: url(assets/44086.jpg); */
-    /* background-image: url(assets/1981212.jpg); */
-    /* background-image: url(assets/2221194.jpg); */
-    /* background-image: url(assets/2221194.jpg); */
     min-height: calc(100vh - 5rem);
     background-image: url(assets/7.jpg);
     background-repeat: repeat;
@@ -25,8 +15,6 @@
 }   
 
 .title_container {
-    /* height: calc(195vh - 5rem); */
-    /* width: 100vw; */
     padding-top: 1.2rem;
     padding-bottom: 1.2rem;
     display: flex;
@@ -51,8 +39,6 @@
 }
 
 .search_container {
-    /* height: calc(195vh - 5rem); */
-    /* width: 100vw; */
     margin-top: 1em;
     margin-bottom: 1em;
     display: flex;
@@ -61,8 +47,6 @@
 }
 
 .filters {
-    /* height: calc(195vh - 5rem); */
-    /* width: 100vw; */
     margin-top: 1em;
     margin-bottom: 1em;
     display: flex;
