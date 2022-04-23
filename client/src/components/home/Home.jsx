@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
-import { getRecipes, filterByDiet, orderAlphabetically } from 'redux/actions/actions';
+import { getRecipes } from 'redux/actions/actions';
 
 // Importación de Hooks
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Componentes
@@ -13,6 +12,7 @@ import SearchBar from 'components/search-bar/SearchBar';
 
 import styles from './Home.module.css'
 import Cards from 'components/cards/Cards';
+import Filters from 'components/filters/Filters';
 
 
 const RECIPES_PER_PAGE = 9;
@@ -30,23 +30,12 @@ const Home = () => {
     // Se trae en la constante todo lo que esta en el estado de recipes
     // El useSelector se usa para traer datos del estado
     // allRecipes = [{receta1}, {receta2}, {receta3}]
-    const allRecipes = useSelector((state) => state.filteredRecipes);
+    const filteredRecipes = useSelector((state) => state.filteredRecipes);
     // Se traen los errores del estado global
-    const error = useSelector((state) => state.msgError
-    );
+    const error = useSelector((state) => state.msgError);
 
-    const [state, setState]= useState({
-        alphabetically: 'disorderly',
-        diet: '',
-        search: '',
-        // page: 1,
-        // recipes: [],
-        // recipesPerPage: RECIPES_PER_PAGE,
-        // totalPages: 0,
-        // totalRecipes: 0,
-        // loading: true,
-        // error: false,
-    });
+    const [order, setOrder] = useState('disorderly');
+    const [diet, setDiet] = useState('all');
 
     // PAGINACIÓN ----------------------------------------------------------------------------------------------------
     // Se crea la paginación de 9 recetas por pagina
@@ -56,7 +45,7 @@ const Home = () => {
     const firstRecipeInPage = lastRecipeInPage - RECIPES_PER_PAGE;
     // Se crea un array con las recetas que se mostrarán en la página actual
     // Se corta el array de todas las recetas con los dos indices inicial y final de la página
-    let currentRecipes = allRecipes ? allRecipes.slice(firstRecipeInPage, lastRecipeInPage) : [];
+    let currentRecipes = filteredRecipes ? filteredRecipes.slice(firstRecipeInPage, lastRecipeInPage) : [];
     // Función para cambiar estado de acuerdo a la página seleccionada
     const paginated = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -70,37 +59,6 @@ const Home = () => {
         dispatch(getRecipes());
     }, [dispatch]);
 
-
-    const referencia = useRef();
-    function handleFilteredByDiet(event) {
-        const diet = event.target.value;
-        const order = referencia.current.value
-        event.preventDefault();
-        dispatch(filterByDiet(diet))
-        dispatch(orderAlphabetically(order))
-        setCurrentPage(1);
-    }
-
-    // Para renderizar cuando se seleccione el ordenamiento alfabético
-    const [order, setOrder] = useState('ascending');
-    function handleOrderAlphabetically(event) {
-        const order = event.target.value;
-        event.preventDefault();
-        dispatch(orderAlphabetically(order))
-        setCurrentPage(1);
-        setOrder(order)
-        setState({
-            ...state,
-            alphabetically: order
-        })
-    }
-
-    // Recargamos las recipes cuando con el botón
-    const handleClick = (event) => {
-        event.preventDefault();
-        dispatch(getRecipes());
-    };
-
     return (
         <main className={styles.main_home}>
 
@@ -108,41 +66,18 @@ const Home = () => {
                 <div className={styles.title_container}>
                     <h1 className={styles.title}>Busque su receta</h1>
                 </div>
+
                 {/* Componente Buscar */}
                 <div className={styles.search_container}>
                     <SearchBar setPage={setCurrentPage} />
                 </div>
-                <section className={styles.filters}>
-                    <button onClick={handleClick}>Recargar Recetas</button>
-                    <select ref={referencia} onChange={handleOrderAlphabetically} value={state.alphabetically} name='' id=''>
-                        <option value='disorderly' disabled>Ordenar alfabéticamente</option>
-                        <option value='ascending'>Ascendente</option>
-                        <option value='descending'>Descendente</option>
-                    </select>
-                    <select onChange={handleFilteredByDiet} name='' id=''>
-                        <option value='all'>Todos</option>
-                        <option value='gluten free'>gluten free</option>
-                        {/* <option value='ketogenic'>ketogenic</option> */}
-                        {/* <option value='vegetarian'>vegetarian</option> */}
-                        {/* <option value='ovo-vegetarian'>ovo-vegetarian</option> */}
-                        {/* <option value='lacto-vegetarian'>lacto-vegetarian</option> */}
-                        <option value='vegan'>vegan</option>
-                        {/* <option value='pescetarian'>pescetarian</option> */}
-                        {/* <option value='paleo'>paleo</option> */}
-                        <option value='primal'>primal</option>
-                        {/* <option value='low fodmap'>low fodmap</option> */}
-                        {/* <option value='whole30'>whole30</option> */}
-                        <option value='dairy free'>dairy free</option>
-                        <option value='lacto ovo vegetarian'>lacto ovo vegetarian</option>
-                        <option value='paleolithic'>paleolithic</option>
-                    </select>
-                </section>
 
-                {/* <p>{error}</p> */}
+                {/* Componente Filtrar */}
+                <Filters setPage={setCurrentPage} order={order} setOrder={setOrder} setDiet={setDiet} />
 
                 <nav className={styles.paginated}>
                     <Paginated
-                        allRecipes={allRecipes.length}
+                        allRecipes={filteredRecipes.length}
                         paginated={paginated}
                         RECIPES_PER_PAGE={RECIPES_PER_PAGE}
                     />
@@ -164,36 +99,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// diets={(recipe.type_of_diets) ? recipe.type_of_diets.map((d) => {
-//     return d.type_of_diet_name
-// }) : recipe.diets}
-
-// {/* Cuando no carga por alguna razón las recetas, muestro mensaje.
-// ¡ARREGLAR¡, muestra el mensaje aunque todavía aun cuando esta esperando la respuesta */}
-// {!allRecipes.length ? (
-//     <h4>
-//         ¡Opss!, no hay recetas para mostrar esta vez, quizás la
-//         próxima vez tengamos ganas de cocinar algo
-//     </h4>
-// ) : null}
-
-// Se crea el hook para que se ejecute una sola vez
-// useEffect(() => {
-//     setPagination({
-//         currentPage: 1,
-//         recipesPerPage: 9
-//     })
-// }, [allRecipes])
-
-// // Se crea el estado para el filtro de recetas
-// const [filter, setFilter] = useState({
-//     type: '',
-//     name: ''
-// })
-
-// // Se crea el estado para el ordenamiento de recetas
-// const [order, setOrder] = useState({
-//     orderBy: '',
-//     orderType: ''
-// })

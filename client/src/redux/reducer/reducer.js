@@ -14,7 +14,7 @@ import {
 const initialState = {
 	filteredRecipes: [],
 	allRecipes: [], // Propiedad auxiliar
-    recipeDetails:[],
+	recipeDetails: [],
 	allDiets: [],
 	msgError: [],
 };
@@ -58,7 +58,8 @@ const rootReducer = (state = initialState, action) => {
 				};
 			}
 
-			// En caso de que ninguna de las dos se cumplan, es porque encontró la receta con ese nombre, por tanto también se elimina el error
+			// En caso de que ninguna de las dos se cumplan, es porque encontró la receta con ese nombre,
+			// por tanto también se elimina el error
 			// Se modifica el estado agregando la/s receta/s encontrada/s
 			return {
 				...state,
@@ -73,12 +74,27 @@ const rootReducer = (state = initialState, action) => {
 					?.map((diet) => diet.toLowerCase())
 					.includes(action.payload.toLowerCase())
 			);
-			// // Si no viene dieta trae todas las recetas
+			
+            // Si no viene dieta trae todas las recetas
 			if (action.payload === 'all')
-				return { ...state, filteredRecipes: state.allRecipes };
+				return {
+					...state,
+					filteredRecipes: state.allRecipes,
+					msgError: [],
+				};
+
+			if (!recipesByDiet.length) {
+				return {
+					...state,
+					filteredRecipes: [],
+					msgError: 'No se encontraron recetas con esa dieta',
+				};
+			}
+
 			return {
 				...state,
 				filteredRecipes: recipesByDiet,
+				msgError: [],
 			};
 
 		case ORDER_BY_ALPHABET:
@@ -93,8 +109,8 @@ const rootReducer = (state = initialState, action) => {
 					return recipeA.localeCompare(recipeB);
 				if (action.payload === 'descending')
 					return recipeB.localeCompare(recipeA);
-                
-                return 0;
+
+				return 0;
 			});
 
 			// Si no viene flag de orden ascendente o descendente devuelve el estado que tenia
@@ -113,14 +129,6 @@ const rootReducer = (state = initialState, action) => {
 			};
 
 		case GET_DIETS: {
-			if (action.payload === 'No se puede conectar a la base de datos') {
-				return {
-					...state,
-					allDiets: [],
-					msgError: action.payload,
-				};
-			}
-
 			return {
 				...state,
 				allDiets: action.payload,
@@ -134,17 +142,19 @@ const rootReducer = (state = initialState, action) => {
 					...state,
 					allRecipes: [],
 					filteredRecipes: [],
+                    allDiets: [],
 					msgError: action.payload,
 				};
 			}
-            return ({
-                ...state
-            })
+            
+			return {
+				...state,
+			};
 
 		case GET_DETAIL:
 			return {
 				...state,
-                recipeDetails: action.payload,
+				recipeDetails: action.payload,
 			};
 
 		default:

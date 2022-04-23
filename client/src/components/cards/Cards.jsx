@@ -3,7 +3,6 @@ import RecipeCard from 'components/card/RecipeCard';
 
 
 function Cards({ currentRecipes }) {
-    console.log(currentRecipes)
     return (
         <>
             {currentRecipes.map((recipe) => {

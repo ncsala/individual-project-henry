@@ -4,8 +4,8 @@ export const GET_RECIPES = 'GET_RECIPES',
 	SEARCH_BY_NAME = 'SEARCH_BY_NAME',
 	CREATE_RECIPE = 'CREATE_RECIPE',
 	GET_DIETS = 'GET_DIETS',
-    GET_DETAIL = 'GET_DETAIL',
-    SHOW_ERRORS = 'SHOW_ERRORS'
+	GET_DETAIL = 'GET_DETAIL',
+	SHOW_ERRORS = 'SHOW_ERRORS';
 
 export const localHost = 'http://localhost:3001';
 
@@ -22,7 +22,6 @@ export function getRecipes() {
 				});
 			})
 			.catch((error) => {
-				console.log(error);
 				return dispatch({
 					type: SHOW_ERRORS,
 					payload: 'No se puede conectar a la base de datos',
@@ -44,26 +43,18 @@ export function getRecipes() {
 export function filterByDiet(diet) {
 	// lo que puedo hacer si no hay recetas con ese tipo de dieta es recibir un mensaje del back
 	// arrojando un msj 'No hay recetas con ese tipo de dieta'
-	try {
-		return {
-			type: FILTER_BY_DIET,
-			payload: diet,
-		};
-	} catch (error) {
-		console.log(error);
-	}
+	return {
+		type: FILTER_BY_DIET,
+		payload: diet,
+	};
 }
 
 // Dispara acción para ordenar las recetas por orden alfabético
 export function orderAlphabetically(ascendingOrDescending) {
-	try {
-		return {
-			type: ORDER_BY_ALPHABET,
-			payload: ascendingOrDescending,
-		};
-	} catch (error) {
-		console.log(error);
-	}
+	return {
+		type: ORDER_BY_ALPHABET,
+		payload: ascendingOrDescending,
+	};
 }
 
 // Dispara acción para buscar recetas por nombre
@@ -71,7 +62,6 @@ export function orderAlphabetically(ascendingOrDescending) {
 export function searchRecipesByName(name) {
 	// Del back regreso con:
 	// Pueden ser las recetas, o con este objeto {message: 'La receta que buscas se perdió en algún momento'}
-
 	return async function (dispatch) {
 		try {
 			const response = await fetch(`${localHost}/recipes?name=${name}`);
@@ -120,14 +110,14 @@ export function createRecipe(recipe) {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-                // stringify convierte un objeto JS en un string en JSON
+				// stringify convierte un objeto JS en un string en JSON
 				body: JSON.stringify(recipe),
 			});
 			const newRecipe = await response.json();
-            return newRecipe;
+			return newRecipe;
 		} catch (error) {
 			return dispatch({
-				type: CREATE_RECIPE,
+				type: SHOW_ERRORS,
 				payload: 'No se puede conectar a la base de datos',
 			});
 		}
@@ -146,7 +136,7 @@ export function getDiets() {
 			})
 			.catch((error) => {
 				return dispatch({
-					type: GET_DIETS,
+					type: SHOW_ERRORS,
 					payload: 'No se puede conectar a la base de datos',
 				});
 			});
@@ -154,23 +144,20 @@ export function getDiets() {
 }
 
 export function getDetail(id) {
-    return async function (dispatch) {
-        try {
-            const response = await fetch(`${localHost}/recipes/${id}`)
-            const detail = await response.json();
+	return async function (dispatch) {
+		try {
+			const response = await fetch(`${localHost}/recipes/${id}`);
+			const detail = await response.json();
 
-            return dispatch({
-                type: GET_DETAIL,
-                payload: detail,
-            })
-        } catch (error) {
-            return dispatch({
-                type: SHOW_ERRORS,
-                payload: 'No se puede conectar a la base de datos',
-            })
-        }
-
-
-
-    }
+			return dispatch({
+				type: GET_DETAIL,
+				payload: detail,
+			});
+		} catch (error) {
+			return dispatch({
+				type: SHOW_ERRORS,
+				payload: 'No se puede conectar a la base de datos',
+			});
+		}
+	};
 }

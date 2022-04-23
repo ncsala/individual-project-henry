@@ -64,7 +64,7 @@ const CreateRecipe = () => {
     const regExpDescription = regularExpressions.dish_description;
     const regExpScore = regularExpressions.score;
     const regExpHealthyFoodLevel = regularExpressions.healthy_food_level;
-    const regExpImage = regularExpressions.image;
+    // const regExpImage = regularExpressions.image;
     const regExpStepByStep = regularExpressions.step_by_step;
     const inputName = input.recipe_name.trim();
     const inputDescription = input.dish_description.trim();
