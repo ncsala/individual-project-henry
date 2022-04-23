@@ -108,8 +108,9 @@ const Home = () => {
                 <div className={styles.title_container}>
                     <h1 className={styles.title}>Busque su receta</h1>
                 </div>
+                {/* Componente Buscar */}
                 <div className={styles.search_container}>
-                    <SearchBar />
+                    <SearchBar setPage={setCurrentPage} />
                 </div>
                 <section className={styles.filters}>
                     <button onClick={handleClick}>Recargar Recetas</button>

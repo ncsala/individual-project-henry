@@ -93,6 +93,8 @@ const rootReducer = (state = initialState, action) => {
 					return recipeA.localeCompare(recipeB);
 				if (action.payload === 'descending')
 					return recipeB.localeCompare(recipeA);
+                
+                return 0;
 			});
 
 			// Si no viene flag de orden ascendente o descendente devuelve el estado que tenia

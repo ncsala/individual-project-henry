@@ -17,8 +17,6 @@ const RecipeDetail = (props) => {
 		dispatch(getDetail(id));
 	}, [dispatch, id]);
 
-	console.log(recipeDetail);
-
 	return (
 		<>
 			<div>
@@ -30,7 +28,7 @@ const RecipeDetail = (props) => {
 					return (
 						<section
 							key={recipeDetail.recipe_id}
-							class={styles.container}
+							className={styles.container}
 						>
 							<h2>{recipeDetail.recipe_name}</h2>
 							{/* <p>Resumen: {recipeDetail.dish_description.replace(/<\/?[^>]+(>|$)/g, "")}</p> */}
