@@ -1,0 +1,128 @@
+.main_home {
+    min-height: calc(100vh - 5rem);
+    background-image: url(assets/7.jpg);
+    background-repeat: repeat;
+    background-size: contain;
+    background-position: center center;
+    background-attachment: fixed;
+    background-color: var(--blanco); 
+}
+
+.bkg {
+    /* backdrop-filter: blur(4px); */
+    /* height: calc(195vh - 5rem); */
+    /* width: 100vw; */
+}   
+
+.title_container {
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.title {
+    /* insertar texto nowrap; */
+    font-size: calc(1.5vw + 1vh + 1vmin);
+    white-space: nowrap;
+    background-color: rgba(255, 255, 255, 0.123);
+    border-radius: 0.5rem;
+    text-align: center;
+    backdrop-filter: blur(1rem);
+    -webkit-backdrop-filter: blur(1rem); 
+    width: 10em;
+    height: 2em; 
+    margin: 0;
+    padding: 0.5em;
+}
+
+.search_container {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.filters {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.5em;
+}
+
+.load {
+        background-color: transparent;
+        border-radius: 50%;
+        border: 15px solid rgba(255, 255, 0, 0.432);
+        border-top-color: transparent ;
+        margin-left: 25rem;
+        width: 50px;
+        height: 50px;
+        text-align: center;
+        animation: loading 1s linear infinite;
+}
+
+@keyframes loading {
+    0%{
+        transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
+.recipes_container {
+    margin: 0 auto;
+    width: 95%;
+    display: grid;
+    grid-auto-rows: auto;
+    gap: 3em;   
+    /* auto-fill -> llena el espacio de columnas aunque queden vacias
+    auto-fit -> expande la columna*/
+    /*  minmax -> minima y maxima cantidad de columnas */
+    /* Si le pongo 1fr Lo va achicar hasta el mínimo que le hayas pasado como min para meter todas las columnas que pueda,
+    cuando no pueda achicar más, va a tomar el valor que le hayas pasado como máximo*/
+    /*28% lo puse para que solo entren 3 columnas cuando esta en pantalla grande
+    , y el valor 16rem para que se pueda hacer mas chico
+    y entren dos columnas en pantallas un poco mas grandes que movil*/
+    grid-template-columns:repeat(auto-fill, minmax(max(16.875rem,20%), 1fr));
+
+    /* min elige el tamaño mínimo de las dos medidas */
+    /* grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); */
+    /*  si hay elementos que ocupan mas de una columna, puede cambiar el flujo
+    del contenido de las columnas para ocupar los espacios*/
+    /* grid-auto-flow: dense; */
+
+    /*Para centrar*/
+    /* width: fit-content sirve para que el contenedor se adapte al contenido*/
+    /* width: fit-content; 
+    margin: 0 auto; */
+}
+
+.recipe_card {
+    opacity: 0.9;
+    font-size: 16px;
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+    background-color: #242121;
+    color: #f8f3e3;
+    width: 100%;
+    height: 100%;
+    border-radius: 0.5rem;
+}
+
+.paginated {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+

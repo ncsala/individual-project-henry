@@ -1,0 +1,155 @@
+/*FORMULARIO---------------------------------------------------------------*/
+
+.formulario__campo__label {
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+	font-weight: 700;
+	color: var(--primario);
+	margin-bottom: 0.2em;
+	display: block;
+	cursor: pointer;
+}
+
+.formulario__campo__inputTexto {
+	opacity: 1;
+	color: var(--primario);
+	background-color: var(--cinco);
+	border-color: #242121;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+	font-weight: 400;
+	width: 100%;
+	border: none;
+	padding: 1em;
+	border-radius: 0.2em;
+	margin-bottom: 0.2em;
+}
+
+.formulario__campo__inputTexto:focus {
+	/* Outline -> quita el borde de color */
+	outline: none;
+	border: 3px solid var(--secundario);
+	box-shadow: 0em 0em 2em var(--primario);
+}
+
+.formulario__campo__select {
+	background-color: #f8c25c;
+}
+
+/* .formulario
+	.formulario__fieldset
+	.formulario__contenedorCampos__campo:nth-child(5) {
+	grid-column: 2/4;
+} */
+
+.formulario__contenedorCampos__campo:nth-child(6) {
+	grid-row: 3/4;
+	grid-column: 1/4;
+}
+
+.formulario__contenedorCampos__campo:nth-child(6)
+	.formulario__campo__inputTexto {
+	resize: none;
+	height: 13em;
+}
+
+.formulario__contenedorCampos__campo:nth-child(7) {
+	grid-row: 4/5;
+	grid-column: -4/-1;
+}
+
+.campo__checkbox {
+	display: grid;
+	grid-auto-rows: auto;
+	gap: 0.5em;
+	grid-template-columns: repeat(auto-fill, minmax(max(10.875rem, 20%), 1fr));
+}
+
+.leyenda {
+	font-size: 0.95em;
+	color: var(--rojo);
+	font-family: 'PT Sans', sans-serif;
+	font-weight: 700;
+}
+
+.error {
+	height: 2.8125rem;
+	line-height: 2.8125rem;
+	margin: 0 auto;
+	padding: 0 1em;
+	grid-row: 5/6;
+	grid-column: -4/-1;
+	border-radius: 0.2rem;
+	background-color: #bb2929;
+}
+
+.error p {
+	display: inline-block;
+	margin-left: 0.5em;
+}
+
+@media (min-width: 769px) {
+	.formulario__contenedorCampos {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		column-gap: 1em;
+	}
+}
+
+/*fin formulario------------------------------------------------------------*/
+
+/*Boton formulario----------------------------------------------------*/
+.contenedorBotones {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-end;
+}
+
+.contenedorBotones .contenedorBotones__boton {
+	position: relative;
+	padding: 1em 2em;
+	margin-top: 0.7em;
+	background-color: #d83863;
+	font-family: 'PT Sans', sans-serif;
+	font-size: 1em;
+	font-weight: 700;
+	text-transform: uppercase;
+	border-radius: 0.5em;
+	color: var(--primario);
+	background-color: transparent;
+	border: 2px solid var(--botones);
+	z-index: 0;
+	cursor: pointer;
+	overflow: hidden;
+}
+
+.contenedorBotones .contenedorBotones__boton:hover {
+	animation: sombra_pulso 1000ms 1;
+	background-color: var(--botones);
+	color: var(--cuatro);
+}
+
+.contenedorBotones .contenedorBotones__boton__widht100 {
+	width: 100%;
+}
+
+@media (min-width: 769px) {
+	/*cuando es mas de 769 pixeles se resetea y el boton se muestra mas chico. es para verlo grande en movil*/
+	.contenedorBotones .contenedorBotones__boton__widht100 {
+		width: auto;
+	}
+}
+
+/*animación de boton---------------------------------*/
+@keyframes sombra_pulso {
+	0% {
+		box-shadow: 0 0 0 0 var(--botonesSombraPulso);
+	}
+	100% {
+		box-shadow: 0 0 0.8em 1.6em #20e2d700;
+	}
+}
+
+/*Fin Efectos de botones --------------------------*/
+/*Fin Boton-----------------------------------------------*/

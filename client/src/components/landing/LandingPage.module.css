@@ -1,0 +1,16 @@
+
+.main_landing {
+    height: calc(100vh - 5rem);
+    width: 100vw;
+    background-image: url(assets/44086.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    background-color: var(--blanco);
+}
+
+h1 {
+    margin: 0;
+    padding: 1rem;
+}

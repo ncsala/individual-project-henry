@@ -1,0 +1,12 @@
+.img_container {
+    width: 100%;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+/* imagen responsiva */
+.img {
+    width: 100%;
+    object-fit: fill;
+    border-radius: 0.5rem;
+}
