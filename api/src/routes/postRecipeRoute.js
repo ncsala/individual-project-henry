@@ -3,7 +3,6 @@ const { Recipe, Type_of_diet } = require('../db');
 
 const router = Router();
 
-
 // POST /recipe:
 // Recibe los datos recolectados desde el formulario controlado de la ruta de creación de recetas por body
 // Crea una receta en la base de datos

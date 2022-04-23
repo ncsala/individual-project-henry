@@ -1,14 +1,14 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY3;
+const apiKey = process.env.API_KEY4;
 
 // Se traen los modelos de la base de datos
 const { Recipe, Type_of_diet } = require('../db');
 
-const getApiRecipes = async () => {
+const getApiRecipes = async (name) => {
 	// Se obtiene la información de la API
 	const response = await fetch(
-		`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=15&apiKey=${apiKey}`
+		`https://api.spoonacular.com/recipes/complexSearch?query=${name}&addRecipeInformation=true&number=15&apiKey=${apiKey}`
 	);
 
 	// Se convierte la respuesta de un objeto JSON a un objeto de JS
@@ -81,8 +81,8 @@ const getDbRecipes = async () => {
 };
 
 // Se concatena la información de la API con la de la BD
-const getBdAndApiRecipes = async () => {
-	const apiRecipes = await getApiRecipes();
+const getBdAndApiRecipesSearchFlag = async (name) => {
+	const apiRecipes = await getApiRecipes(name);
 	const dbRecipes = await getDbRecipes();
 
 	const allRecipes = [...apiRecipes, ...dbRecipes];
@@ -93,5 +93,5 @@ const getBdAndApiRecipes = async () => {
 module.exports = {
 	getApiRecipes,
 	getDbRecipes,
-	getBdAndApiRecipes,
+	getBdAndApiRecipesSearchFlag,
 };

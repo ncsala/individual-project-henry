@@ -34,11 +34,11 @@ module.exports = (sequelize) => {
 		},
 		// Paso a paso
 		step_by_step: {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			allowNull: true,
 		},
 		image: {
-			type: DataTypes.STRING,
+			type: DataTypes.TEXT,
 			allowNull: true,
 		},
 		// Recipientes creados en la base de datos
