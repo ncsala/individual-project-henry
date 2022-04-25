@@ -1,24 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
 import {
 	filterByDiet,
 	getDiets,
 	getRecipes,
 	orderAlphabetically,
+    orderByScore,
 } from 'redux/actions/actions';
+
 import styles from './Filters.module.css';
 
-function Filters({ setPage, order, setOrder }) {
+function Filters({ setPage, alphabeticalOrder, setAlphabeticalOrder, scoreOrder, setScoreOrder }) {
 	const dispatch = useDispatch();
 
 	const allDiets = useSelector((state) => state.allDiets);
 
+    // Estado para limpiar los filtros
 	const [filters, setFilters] = useState({
-		alphabetically: 'disorderly',
 		diet: 'all',
 		search: '',
-		// loading: true,
-		// error: false,
 	});
 
 	useEffect(() => {
@@ -27,38 +28,50 @@ function Filters({ setPage, order, setOrder }) {
 
 	// el useRef lo utilice porque precisaba tener el value del select
 	// para ordenar alfabéticamente
-	const referencia = useRef();
+	const referenceSelectAlphabet = useRef();
+    const referenceSelectScore = useRef();
 	function handleFilteredByDiet(event) {
 		const diet = event.target.value;
-		const order = referencia.current.value;
 		event.preventDefault();
 		setFilters({ ...filters, diet });
 		dispatch(filterByDiet(diet));
-		dispatch(orderAlphabetically(order));
+		dispatch(orderAlphabetically(referenceSelectAlphabet.current.value));
+        dispatch(orderByScore(referenceSelectScore.current.value));
 		setPage(1);
 	}
 
 	// Para renderizar cuando se seleccione el ordenamiento alfabético
 	// const [order, setOrder] = useState('ascending');
-	function handleOrderAlphabetically(event) {
+	const handleOrderAlphabetically = (event) => {
 		const order = event.target.value;
 		event.preventDefault();
-		// La linea de abajo es la que hace renderizar el componente anterior
-		setOrder(order);
 		dispatch(orderAlphabetically(order));
+        dispatch(orderByScore(referenceSelectScore.current.value));
+		// La linea de abajo es la que hace renderizar el componente anterior
+		setAlphabeticalOrder(order);
 		setPage(1);
 	}
+
+    const handleByScore = (event) => {
+        const order = event.target.value
+        event.preventDefault()
+        dispatch(orderByScore(order))
+        //Ordeno alfabéticamente las recetas del state.filteredRecipes los ya ordenados por puntuación
+        // a traves de la referencia al select
+		dispatch(orderAlphabetically(referenceSelectAlphabet.current.value));
+		// La linea de abajo es la que hace renderizar el componente anterior
+        setScoreOrder(order)
+        setPage(1)
+    }
 
 	const handleCleanFilters = (event) => {
 		event.preventDefault();
 		dispatch(getRecipes());
 		setPage(1);
-		setOrder('disorderly');
-		// setDiet('all');
-
+		setAlphabeticalOrder('disorderly');
+        setScoreOrder('disorderly');
 		setFilters({
 			...filters,
-			alphabetically: 'disorderly',
 			diet: 'all',
 			search: '',
 		});
@@ -68,10 +81,15 @@ function Filters({ setPage, order, setOrder }) {
 		<>
 			<section className={styles.filters}>
 				<button onClick={handleCleanFilters}>Limpiar Filtros</button>
+                <select onChange={handleByScore} value={scoreOrder} ref={referenceSelectScore}>
+                    <option value="disorderly" disabled>Ordenar por puntaje</option>
+                    <option value="100a1">De Mayor a Menor</option>
+                    <option value="1a100">De Menor a Mayor</option>
+                </select>
 				<select
-					ref={referencia}
+					ref={referenceSelectAlphabet}
 					onChange={handleOrderAlphabetically}
-					value={order}
+					value={alphabeticalOrder}
 				>
 					<option value='disorderly' disabled>
 						Ordenar alfabéticamente

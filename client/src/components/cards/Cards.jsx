@@ -12,6 +12,7 @@ function Cards({ currentRecipes }) {
                             recipe_id={recipe.recipe_id}
                             image={recipe.image}
                             recipe_name={recipe.recipe_name}
+                            score={recipe.score}
                             diets={recipe.diets}
                         />
                     </div>

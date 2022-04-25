@@ -6,9 +6,9 @@ import PrintsImage from 'components/prints-image/PrintsImage';
 
 import styles from './RecipeCard.module.css'
 
-const Card = ({ recipe_id, image, recipe_name, diets }) => {
+const Card = ({ recipe_id, image, recipe_name, score, diets }) => {
 
-    const dietTypes = (diets) ? diets.map((diet) => diet) : null
+    const dietTypes = (diets.length) ? diets.map((diet) => diet) : ['No hay tipo de dieta'];
 
     return (
         <div className={styles.recipe_card} >
@@ -16,11 +16,8 @@ const Card = ({ recipe_id, image, recipe_name, diets }) => {
             <Link to={'/recipes/' + recipe_id} className={styles.link}>
                 <h3>{recipe_name}</h3>
             </Link>
-            {
-                (!diets)
-                    ? <p>Dieta no disponible</p>
-                    : <p>{dietTypes.join(', ')} </p>
-            }
+            <h4>Puntaje: {score}</h4>
+            <p>{dietTypes}</p>
         </div>
     );
 };

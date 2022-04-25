@@ -32,12 +32,12 @@ const CreateRecipe = () => {
     
     const regularExpressions = {
         recipe_name: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\-., ]{3,100}$/,
-        dish_description: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\-., ]{8,150}$/,
+        dish_description: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\-\n., ]{8,150}$/,
         score: /^[1-9][0-9]?$|^100$/,
         healthy_food_level: /^[1-9][0-9]?$|^100$/,
-        image: /^(http(s)?:\/\/)?((w){3}.)?(([a-zA-Z0-9-])+(\.)?)*(:\d{1,5})?(\/((\.)?(\?)?=?&?[a-zA-Z0-9-_]*)*)* $/,
+        // image: /^(http(s)?:\/\/)?((w){3}.)?(([a-zA-Z0-9-])+(\.)?)*(:\d{1,5})?(\/((\.)?(\?)?=?&?[a-zA-Z0-9-_]*)*)* $/,
         // image: /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
-        step_by_step: /^[a-zA-ZñÑáéíóúÁÉÍÓÚ\-.,*() ]{10,800}$/,
+        step_by_step: /^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ\-\n.,*() ]{10,1200}$/,
     }
     
     // Para guardar los errores de cada input
@@ -57,7 +57,7 @@ const CreateRecipe = () => {
         score: 'El número debe estar entre 1 y 100',
         healthy_food_level: 'El número debe estar entre 1 y 100',
         image: 'Debe ingresar un URL válido',
-        step_by_step: `Entre 10 caracteres y 800 caracteres. Solo letras, puntos, comas , asteriscos y paréntesis.`,
+        step_by_step: `Entre 10 caracteres y 1200 caracteres. Solo letras, puntos, comas , asteriscos y paréntesis.`,
     }
 
     const regExpName = regularExpressions.recipe_name;
@@ -281,8 +281,8 @@ const CreateRecipe = () => {
                                     placeholder="Ingrese Número entre 1 y 100"
                                     onBlur={handleChange}
                                     onKeyUp={handleChange}
-                                min="1"
-                                max="100"
+                                // min="1"
+                                // max="100"
                                 />
                                 {
                                     errors.score && <p className={styles.leyenda}>{errors.score}</p>
