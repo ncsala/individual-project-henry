@@ -108,4 +108,5 @@ package-lock.json
 
 .vscode/
 
-*/tempCodeRunnerFile.js
+# Ignora todos los archivos tempCodeRunnerFile.js en todas las carpetas
+**/tempCodeRunnerFile.js
