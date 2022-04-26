@@ -77,7 +77,7 @@ function Filters({
 						Ordenar por
 					</option>
 					<option value='100a1'>Mayor Puntuación</option>
-					<option value='1a100'>Mayor Puntuación</option>
+					<option value='1a100'>Menor Puntuación</option>
 					<option value='ascending'>De la A a la Z</option>
 					<option value='descending'>De la Z a la A</option>
 				</select>
