@@ -1,7 +1,6 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-	// defino el modelo
 	sequelize.define('type_of_diet', {
 		// type_of_diet_id: {
 		// 	type: DataTypes.UUID,

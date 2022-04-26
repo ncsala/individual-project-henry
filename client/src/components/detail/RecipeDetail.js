@@ -31,8 +31,8 @@ const RecipeDetail = (props) => {
 							className={styles.container}
 						>
 							<h2>{recipeDetail.recipe_name}</h2>
-							{/* <p>Resumen: {recipeDetail.dish_description.replace(/<\/?[^>]+(>|$)/g, "")}</p> */}
 
+							{/* <p>Resumen: {recipeDetail.dish_description.replace(/<\/?[^>]+(>|$)/g, "")}</p> */}
 							<p
 								dangerouslySetInnerHTML={{
 									__html: `${recipeDetail.dish_description}`,
@@ -59,24 +59,12 @@ const RecipeDetail = (props) => {
 								<p>{recipeDetail.step_by_step}</p>
 							)}
 
-							{/* {recipeDetail.created_in_db === true ? (
-								<p>{recipeDetail.step_by_step}</p>
-							) : (
-								recipeDetail.step_by_step.steps?.map((step) => {
-									return (
-										<li key={step.number}>
-											Paso: {step.number}: {step.step}
-										</li>
-									);
-								})
-							)} */}
-
 							<PrintsImage
 								image={recipeDetail.image}
 								name={recipeDetail.recipe_name}
 							/>
 
-							<h4>Diets: {recipeDetail.diets}</h4>
+							<h4>Diets: {recipeDetail.diets  }</h4>
 						</section>
 					);
 				})

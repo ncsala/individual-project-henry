@@ -8,11 +8,11 @@
     background-color: var(--blanco); 
 }
 
-.bkg {
-    /* backdrop-filter: blur(4px); */
-    /* height: calc(195vh - 5rem); */
-    /* width: 100vw; */
-}   
+/* .bkg {
+    backdrop-filter: blur(17px);
+    height: calc(195vh - 5rem);
+    width: 100vw;   
+}    */
 
 .title_container {
     padding-top: 1.2rem;

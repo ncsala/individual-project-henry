@@ -1,8 +1,8 @@
 import {
 	GET_RECIPES,
 	FILTER_BY_DIET,
-	ORDER_BY_ALPHABET,
 	SEARCH_BY_NAME,
+	ORDER,
 	CREATE_RECIPE,
 	GET_DIETS,
 	GET_DETAIL,
@@ -22,14 +22,6 @@ const initialState = {
 const rootReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case GET_RECIPES:
-			// if (action.payload === 'No se puede conectar a la base de datos') {
-			// 	return {
-			// 		...state,
-			// 		allRecipes: [],
-			// 		filteredRecipes: [],
-			// 		msgError: action.payload,
-			// 	};
-			// }
 			return {
 				...state,
 				allRecipes: action.payload,
@@ -37,7 +29,23 @@ const rootReducer = (state = initialState, action) => {
 				msgError: [],
 			};
 
+		case GET_DETAIL:
+			return {
+				...state,
+				recipeDetails: action.payload,
+			};
+
+		case GET_DIETS: {
+			return {
+				...state,
+				allDiets: action.payload,
+				msgError: [],
+			};
+		}
+
 		case SEARCH_BY_NAME:
+            //Aca se reciben las recetas desde la accion, las q cumplen con el nombre
+
 			// Si se recibe el mensaje 'La receta que...' se modifica el estado agregando ese mensaje al messageError
 			if (
 				action.payload.message ===
@@ -45,21 +53,12 @@ const rootReducer = (state = initialState, action) => {
 			) {
 				return {
 					...state,
+                    filteredRecipes: [],
 					msgError: action.payload.message,
 				};
 			}
 
-			// Si se manda un string vacío se modifica el estado eliminando el error y se renderizan todas las recetas
-			if (action.payload === '') {
-				return {
-					...state,
-					filteredRecipes: state.allRecipes,
-					msgError: [],
-				};
-			}
-
-			// En caso de que ninguna de las dos se cumplan, es porque encontró la receta con ese nombre,
-			// por tanto también se elimina el error
+			// Sino no se cumple la condicion anterior significa que encontro la receta
 			// Se modifica el estado agregando la/s receta/s encontrada/s
 			return {
 				...state,
@@ -74,8 +73,8 @@ const rootReducer = (state = initialState, action) => {
 					?.map((diet) => diet.toLowerCase())
 					.includes(action.payload.toLowerCase())
 			);
-			
-            // Si no viene dieta trae todas las recetas
+
+			// Si no viene dieta trae todas las recetas
 			if (action.payload === 'all')
 				return {
 					...state,
@@ -97,64 +96,37 @@ const rootReducer = (state = initialState, action) => {
 				msgError: [],
 			};
 
-		case ORDER_BY_ALPHABET:
-			// Si viene un flag de orden ascendente o descendente
-			// Ordeno alfabéticamente sobre las recetas que ya están filtradas
-			const orderedRecipes = state.filteredRecipes?.sort((a, b) => {
-				const recipeA = a.recipe_name?.toLowerCase();
-				const recipeB = b.recipe_name?.toLowerCase();
-
-				// localeCompare es una función de javascript que compara dos strings y devuelve un número 0,-1 o 1 dependiendo de si son iguales, menor o mayor
-				if (action.payload === 'ascending')
-					return recipeA.localeCompare(recipeB);
-				if (action.payload === 'descending')
-					return recipeB.localeCompare(recipeA);
-
+		case ORDER:
+			const resultingOrder = state.filteredRecipes?.sort((a, b) => {
+				if (action.payload === 'ascending') {
+					return a.recipe_name
+						?.toLowerCase()
+						.localeCompare(b.recipe_name);
+				}
+				if (action.payload === 'descending') {
+					return b.recipe_name.localeCompare(
+						a.recipe_name?.toLowerCase()
+					);
+				}
+				if (action.payload === '100a1') return b.score - a.score;
+				if (action.payload === '1a100') return a.score - b.score;
 				return 0;
 			});
-
-			// Si no viene flag de orden ascendente o descendente devuelve el estado que tenia
-			return { ...state, filteredRecipes: orderedRecipes };
+			return { ...state, filteredRecipes: resultingOrder };
 
 		case CREATE_RECIPE:
-			if (action.payload === 'No se puede conectar a la base de datos')
-				return {
-					...state,
-					msgError: action.payload,
-				};
-
 			return {
 				...state,
 				msgError: [],
 			};
-
-		case GET_DIETS: {
-			return {
-				...state,
-				allDiets: action.payload,
-				msgError: [],
-			};
-		}
 
 		case SHOW_ERRORS:
-			if (action.payload === 'No se puede conectar a la base de datos') {
-				return {
-					...state,
-					allRecipes: [],
-					filteredRecipes: [],
-                    allDiets: [],
-					msgError: action.payload,
-				};
-			}
-            
 			return {
 				...state,
-			};
-
-		case GET_DETAIL:
-			return {
-				...state,
-				recipeDetails: action.payload,
+				allRecipes: [],
+				filteredRecipes: [],
+				allDiets: [],
+				msgError: action.payload,
 			};
 
 		default:

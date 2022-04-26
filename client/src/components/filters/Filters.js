@@ -1,86 +1,88 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+
+import SearchBar from 'components/search-bar/SearchBar';
+
 import {
 	filterByDiet,
 	getDiets,
 	getRecipes,
-	orderAlphabetically,
+    orderByScoreOrAlphabet,
 } from 'redux/actions/actions';
+
 import styles from './Filters.module.css';
 
-function Filters({ setPage, order, setOrder }) {
+function Filters({
+	setPage,
+	order,
+	setOrder,
+	setCurrentPage,
+}) {
 	const dispatch = useDispatch();
 
 	const allDiets = useSelector((state) => state.allDiets);
 
-	const [filters, setFilters] = useState({
-		alphabetically: 'disorderly',
-		diet: 'all',
-		search: '',
-		// loading: true,
-		// error: false,
-	});
+	// Estados para limpiar los filtros
+	const [dietFilter, setDietFilter] = useState('all');
+	const [searchValue, setSearchValue] = useState('');
 
 	useEffect(() => {
 		dispatch(getDiets());
 	}, [dispatch]);
 
-	// el useRef lo utilice porque precisaba tener el value del select
-	// para ordenar alfabéticamente
-	const referencia = useRef();
 	function handleFilteredByDiet(event) {
 		const diet = event.target.value;
-		const order = referencia.current.value;
 		event.preventDefault();
-		setFilters({ ...filters, diet });
+		setOrder('disorderly');
+        setSearchValue('')  
 		dispatch(filterByDiet(diet));
-		dispatch(orderAlphabetically(order));
+		setDietFilter(diet);
 		setPage(1);
 	}
 
-	// Para renderizar cuando se seleccione el ordenamiento alfabético
-	// const [order, setOrder] = useState('ascending');
-	function handleOrderAlphabetically(event) {
-		const order = event.target.value;
+    // Para renderizar cuando se seleccione ordenamiento
+    // const [order, setOrder] = useState('ascending');
+	const handleOrder = (event) => {
+		const ordering = event.target.value;
 		event.preventDefault();
-		// La linea de abajo es la que hace renderizar el componente anterior
-		setOrder(order);
-		dispatch(orderAlphabetically(order));
+		dispatch(orderByScoreOrAlphabet(ordering));
+		setOrder(ordering);
 		setPage(1);
-	}
+	};
 
 	const handleCleanFilters = (event) => {
 		event.preventDefault();
 		dispatch(getRecipes());
-		setPage(1);
 		setOrder('disorderly');
-		// setDiet('all');
-
-		setFilters({
-			...filters,
-			alphabetically: 'disorderly',
-			diet: 'all',
-			search: '',
-		});
+		setDietFilter('all');
+		setSearchValue('');
+		setPage(1);
 	};
 
 	return (
 		<>
 			<section className={styles.filters}>
-				<button onClick={handleCleanFilters}>Limpiar Filtros</button>
+				<button onClick={handleCleanFilters}>Recargar Todas las Recetas</button>
+				{/* Componente Buscar */}
+				<SearchBar
+					setPage={setCurrentPage}
+					searchValue={searchValue}
+					setSearchValue={setSearchValue}
+				/>
 				<select
-					ref={referencia}
-					onChange={handleOrderAlphabetically}
+					onChange={handleOrder}
 					value={order}
 				>
 					<option value='disorderly' disabled>
-						Ordenar alfabéticamente
+						Ordenar por
 					</option>
-					<option value='ascending'>Ascendente</option>
-					<option value='descending'>Descendente</option>
+					<option value='100a1'>Mayor Puntuación</option>
+					<option value='1a100'>Menor Puntuación</option>
+					<option value='ascending'>De la A a la Z</option>
+					<option value='descending'>De la Z a la A</option>
 				</select>
-				<select onChange={handleFilteredByDiet} value={filters.diet}>
-					<option value='all'>Todos</option>
+				<select onChange={handleFilteredByDiet} value={dietFilter}>
+					<option value='all'>Todas las Dietas</option>
 					{allDiets.length > 0 &&
 						allDiets.map((diet) => (
 							<option

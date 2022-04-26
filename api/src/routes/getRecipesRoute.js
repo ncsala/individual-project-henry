@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const router = Router();
 
-const { Recipe, Type_of_diet } = require('../db');
-
 const { getBdAndApiRecipes } = require('../services/fetchRecipes');
 
 // GET /recipes?name="...":
@@ -16,6 +14,13 @@ router.get('/', async (request, response) => {
 		// Se trae la data de la API y la BD
 		const allRecipes = await getBdAndApiRecipes();
 
+        //Si no viene ningun nombre y las recetas vienen vaciás se muestra un mensaje
+        if (!name && !allRecipes.length) {
+            return response.status(400).json({
+                message: 'No hay recetas en la base de datos',
+            });
+        }
+            
         // Si no viene ningún nombre por query mostrar todas las recetas
         if (!name) response.send(allRecipes);
 

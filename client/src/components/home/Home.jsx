@@ -1,19 +1,16 @@
 import React from 'react';
-
-import { getRecipes } from 'redux/actions/actions';
-
 // Importación de Hooks
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { getRecipes } from 'redux/actions/actions';
+
 // Componentes
 import Paginated from 'components/paginated/Paginated';
-import SearchBar from 'components/search-bar/SearchBar';
-
-import styles from './Home.module.css'
 import Cards from 'components/cards/Cards';
 import Filters from 'components/filters/Filters';
 
+import styles from './Home.module.css'
 
 const RECIPES_PER_PAGE = 9;
 
@@ -34,8 +31,8 @@ const Home = () => {
     // Se traen los errores del estado global
     const error = useSelector((state) => state.msgError);
 
+    // Estados para renderizar por orden alfabético y por puntaje
     const [order, setOrder] = useState('disorderly');
-    const [diet, setDiet] = useState('all');
 
     // PAGINACIÓN ----------------------------------------------------------------------------------------------------
     // Se crea la paginación de 9 recetas por pagina
@@ -45,7 +42,8 @@ const Home = () => {
     const firstRecipeInPage = lastRecipeInPage - RECIPES_PER_PAGE;
     // Se crea un array con las recetas que se mostrarán en la página actual
     // Se corta el array de todas las recetas con los dos indices inicial y final de la página
-    let currentRecipes = filteredRecipes ? filteredRecipes.slice(firstRecipeInPage, lastRecipeInPage) : [];
+    // Pregunto si es un array porque si no es un array, no se puede hacer el slice
+    let currentRecipes = Array.isArray(filteredRecipes) ? filteredRecipes.slice(firstRecipeInPage, lastRecipeInPage) : [];
     // Función para cambiar estado de acuerdo a la página seleccionada
     const paginated = (pageNumber) => {
         setCurrentPage(pageNumber);
@@ -61,39 +59,34 @@ const Home = () => {
 
     return (
         <main className={styles.main_home}>
-
-            <div className={styles.bkg}>
-                <div className={styles.title_container}>
-                    <h1 className={styles.title}>Busque su receta</h1>
-                </div>
-
-                {/* Componente Buscar */}
-                <div className={styles.search_container}>
-                    <SearchBar setPage={setCurrentPage} />
-                </div>
-
-                {/* Componente Filtrar */}
-                <Filters setPage={setCurrentPage} order={order} setOrder={setOrder} setDiet={setDiet} />
-
-                <nav className={styles.paginated}>
-                    <Paginated
-                        allRecipes={filteredRecipes.length}
-                        paginated={paginated}
-                        RECIPES_PER_PAGE={RECIPES_PER_PAGE}
-                    />
-                </nav>
-
-                {/* Renderiza las recetas */}
-                <section className={styles.recipes_container}>
-                    {(error.length && <p>{error}</p>) ||
-                        (!currentRecipes.length
-                            ? (<h2 className={styles.load}> </h2>)
-                            : <Cards currentRecipes={currentRecipes} />)
-                    }
-                </section>
-
+            <div className={styles.title_container}>
+                <h1 className={styles.title}>Busque su receta</h1>
             </div>
 
+            {/* Componente Filtros */}
+            <Filters
+                setPage={setCurrentPage}
+                order={order}
+                setOrder={setOrder}
+                setCurrentPage={setCurrentPage}
+            />
+
+            <nav className={styles.paginated}>
+                <Paginated
+                    allRecipes={filteredRecipes.length}
+                    paginated={paginated}
+                    RECIPES_PER_PAGE={RECIPES_PER_PAGE}
+                />
+            </nav>
+
+            {/* Renderiza las recetas */}
+            <section className={styles.recipes_container}>
+                {(error.length && <p>{error}</p>) ||
+                    (!currentRecipes.length
+                        ? (<h2 className={styles.load}> </h2>)
+                        : <Cards currentRecipes={currentRecipes} />)
+                }
+            </section>
         </main>
     );
 };

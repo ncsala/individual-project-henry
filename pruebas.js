@@ -1,18 +1,32 @@
-let obj = {
-    result: [
-        {
-            id: 1,
-            name: 'Pizza',
-            dish_description: 'Pizza',
-            score: '10',
-            healthy_food_level: '10',
-        }
-    ],
-}
 
 
-// let otros = ['anidado', 'zorro', 'boniato', 'zanahoria', 'anibal']
-let letra1 = 'z'
-let letra2 = 'a'
+// // Sharpe es mayor que Edward en UNICODE
+// // Edward es menor que Sharpe (esta a la izquierda, en un indice anterior)
+// var items = [
+//     { name: 'Sharpe', value: 37 },
+// 	{ name: 'Edward', value: 21 },
+// ];
 
-console.log(letra1.localeCompare(letra2))
+// items.sort((a,b) => {
+//     // ESTA FUNCION COMPARA B CON A. ES COMO AL REVES
+//     // O SEA A=EDWARD Y B=SHARPE
+//     if (a.name  > b.name) {
+//         console.log('entre aca A > B')
+//         return 1
+//     }
+//     if (a.name < b.name) {
+//          // primer comparacion 
+//         // se situa A (que en esta caso es Edward) a la izquierda de B (en este caso Sharpe)
+//         console.log('entre aca A < B')
+//         return -1
+//     }
+//     if (a.name === b.name) {
+//         console.log('IGUAL')
+//         return 0
+//     }
+    
+// });
+
+// console.log(items)
+
+
