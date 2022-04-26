@@ -2,8 +2,7 @@ import {
 	GET_RECIPES,
 	FILTER_BY_DIET,
 	SEARCH_BY_NAME,
-	ORDER_BY_ALPHABET,
-	ORDER_BY_SCORE,
+	ORDER,
 	CREATE_RECIPE,
 	GET_DIETS,
 	GET_DETAIL,
@@ -45,6 +44,8 @@ const rootReducer = (state = initialState, action) => {
 		}
 
 		case SEARCH_BY_NAME:
+            //Aca se reciben las recetas desde la accion, las q cumplen con el nombre
+
 			// Si se recibe el mensaje 'La receta que...' se modifica el estado agregando ese mensaje al messageError
 			if (
 				action.payload.message ===
@@ -52,21 +53,12 @@ const rootReducer = (state = initialState, action) => {
 			) {
 				return {
 					...state,
+                    filteredRecipes: [],
 					msgError: action.payload.message,
 				};
 			}
 
-			// Si se manda un string vacío se modifica el estado eliminando el error y se renderizan todas las recetas
-			if (action.payload === '') {
-				return {
-					...state,
-					filteredRecipes: state.allRecipes,
-					msgError: [],
-				};
-			}
-
-			// En caso de que ninguna de las dos se cumplan, es porque encontró la receta con ese nombre,
-			// por tanto también se elimina el error
+			// Sino no se cumple la condicion anterior significa que encontro la receta
 			// Se modifica el estado agregando la/s receta/s encontrada/s
 			return {
 				...state,
@@ -104,32 +96,23 @@ const rootReducer = (state = initialState, action) => {
 				msgError: [],
 			};
 
-		case ORDER_BY_ALPHABET:
-			// Si viene un flag de orden ascendente o descendente
-			// Ordeno alfabéticamente sobre las recetas que ya están filtradas
-			const orderedRecipes = state.filteredRecipes?.sort((a, b) => {
-				const recipeA = a.recipe_name?.toLowerCase();
-				const recipeB = b.recipe_name?.toLowerCase();
-
-				if (action.payload === 'ascending')
-					return recipeA.localeCompare(recipeB);
-				if (action.payload === 'descending')
-					return recipeB.localeCompare(recipeA);
-
+		case ORDER:
+			const resultingOrder = state.filteredRecipes?.sort((a, b) => {
+				if (action.payload === 'ascending') {
+					return a.recipe_name
+						?.toLowerCase()
+						.localeCompare(b.recipe_name);
+				}
+				if (action.payload === 'descending') {
+					return b.recipe_name.localeCompare(
+						a.recipe_name?.toLowerCase()
+					);
+				}
+				if (action.payload === '100a1') return b.score - a.score;
+				if (action.payload === '1a100') return a.score - b.score;
 				return 0;
 			});
-
-			// Si no viene flag de orden ascendente o descendente devuelve el estado que tenia
-			return { ...state, filteredRecipes: orderedRecipes };
-
-		case ORDER_BY_SCORE:
-            const orderedByScore = state.filteredRecipes?.sort((a, b) => {
-                if (action.payload === '100a1')
-                    return b.score - a.score
-                if (action.payload === '1a100')
-                    return a.score - b.score
-			});
-			return { ...state, filteredRecipes: orderedByScore };
+			return { ...state, filteredRecipes: resultingOrder };
 
 		case CREATE_RECIPE:
 			return {

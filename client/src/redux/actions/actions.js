@@ -2,8 +2,7 @@ export const GET_RECIPES = 'GET_RECIPES',
 	GET_DIETS = 'GET_DIETS',
 	GET_DETAIL = 'GET_DETAIL',
 	FILTER_BY_DIET = 'FILTER_BY_DIET',
-	ORDER_BY_ALPHABET = 'ORDER_BY_ALPHABET',
-	ORDER_BY_SCORE = 'ORDER_BY_SCORE',
+	ORDER = 'ORDER',
 	SEARCH_BY_NAME = 'SEARCH_BY_NAME',
 	CREATE_RECIPE = 'CREATE_RECIPE',
 	SHOW_ERRORS = 'SHOW_ERRORS';
@@ -13,49 +12,53 @@ export const localHost = 'http://localhost:3001';
 // Busca la data del Backend de las recetas y dispare un action con la data
 export function getRecipes() {
 	return async function (dispatch) {
-		// Con fetch
-		fetch(`${localHost}/recipes`)
-			.then((response) => response.json())
-			.then((allRecipes) => {
-				return dispatch({
-					type: GET_RECIPES,
-					payload: allRecipes,
-				});
-			})
-			.catch((error) => {
-				return dispatch({
-					type: SHOW_ERRORS,
-					payload: 'No se puede conectar a la base de datos',
-				});
+		try {
+			const response = await fetch(`${localHost}/recipes`);
+			const allRecipes = await response.json();
+
+			return dispatch({
+				type: GET_RECIPES,
+				payload: allRecipes,
 			});
-
-		// Con async await
-		// const response = await fetch(`${localHost}/recipes`);
-		// const recipes = await response.json();
-
-		// return dispatch({
-		// 	type: GET_RECIPES,
-		// 	payload: recipes,
-		// });
+		} catch (error) {
+			return dispatch({
+				type: SHOW_ERRORS,
+				payload: 'No se puede conectar a la base de datos',
+			});
+		}
 	};
 }
 
 export function getDiets() {
-	return function (dispatch) {
-		fetch(`${localHost}/types`)
-			.then((response) => response.json())
-			.then((allDiets) => {
-				return dispatch({
-					type: GET_DIETS,
-					payload: allDiets,
-				});
-			})
-			.catch((error) => {
-				return dispatch({
-					type: SHOW_ERRORS,
-					payload: 'No se puede conectar a la base de datos',
-				});
+	return async function (dispatch) {
+		try {
+			const response = await fetch(`${localHost}/types`);
+			const allDiets = await response.json();
+			return dispatch({
+				type: GET_DIETS,
+				payload: allDiets,
 			});
+		} catch (error) {
+			return dispatch({
+				type: SHOW_ERRORS,
+				payload: 'No se puede conectar a la base de datos',
+			});
+		}
+
+		// fetch(`${localHost}/types`)
+		// 	.then((response) => response.json())
+		// 	.then((allDiets) => {
+		// 		return dispatch({
+		// 			type: GET_DIETS,
+		// 			payload: allDiets,
+		// 		});
+		// 	})
+		// 	.catch((eror) => {
+		// 		return dispatch({
+		// 			type: SHOW_ERRORS,
+		// 			payload: 'No se puede conectar a la base de datos',
+		// 		});
+		// 	});
 	};
 }
 
@@ -80,26 +83,17 @@ export function getDetail(id) {
 
 // Dispara acción para filtrar las recetas por dieta seleccionada por el usuario
 export function filterByDiet(diet) {
-	// lo que puedo hacer si no hay recetas con ese tipo de dieta es recibir un mensaje del back
-	// arrojando un msj 'No hay recetas con ese tipo de dieta'
 	return {
 		type: FILTER_BY_DIET,
 		payload: diet,
 	};
 }
 
-// Dispara acción para ordenar las recetas por orden alfabético
-export function orderAlphabetically(ascendingOrDescending) {
+// Dispara acción para ordenar las recetas para ordenar
+export function orderByScoreOrAlphabet(orderValue) {
 	return {
-		type: ORDER_BY_ALPHABET,
-		payload: ascendingOrDescending,
-	};
-}
-
-export function orderByScore(recipeScore) {
-	return {
-		type: ORDER_BY_SCORE,
-		payload: recipeScore,
+		type: ORDER,
+		payload: orderValue,
 	};
 }
 
@@ -110,12 +104,16 @@ export function searchRecipesByName(name) {
 	// Pueden ser las recetas, o con este objeto {message: 'La receta que buscas se perdió en algún momento'}
 	return async function (dispatch) {
 		try {
-			const response = await fetch(`${localHost}/recipes?name=${name}`);
-			const recipes = await response.json();
-			return dispatch({
-				type: SEARCH_BY_NAME,
-				payload: recipes,
-			});
+			if (name) {
+				const response = await fetch(
+					`${localHost}/recipes?name=${name}`
+				);
+				const recipes = await response.json();
+				return dispatch({
+					type: SEARCH_BY_NAME,
+					payload: recipes,
+				});
+			}
 		} catch (error) {
 			// Por si no esta levantado el backend
 			return dispatch({
@@ -124,34 +122,12 @@ export function searchRecipesByName(name) {
 			});
 		}
 	};
-
-	// Con Async await
-	// return async function (dispatch) {
-	// 	const response = await fetch(`${localHost}/recipes?name=${name}`).catch(
-	// 		() => undefined
-	// 	);
-
-	// 	if (response) {
-	// 		const recipes = await response.json();
-	// 		console.log(recipes);
-
-	// 		return dispatch({
-	// 			type: SEARCH_BY_NAME,
-	// 			payload: recipes,
-	// 		});
-	// 	}
-
-	// 	return dispatch({
-	// 		type: SEARCH_BY_NAME,
-	// 		payload: 'No se puede conectar a la base de datos',
-	// 	});
-	// };
 }
 
 export function createRecipe(recipe) {
 	return async function (dispatch) {
 		try {
-			const response = await fetch(`${localHost}/recipe`, {
+			await fetch(`${localHost}/recipe`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

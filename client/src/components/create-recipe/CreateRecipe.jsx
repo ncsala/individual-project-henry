@@ -177,13 +177,9 @@ const CreateRecipe = () => {
             errors.score
         ) {
             setMsgError(true)
-            // setTimeout(() => {
-            //     setMsgError(false)
-            // }, 3000)
             setErrors(validationAll())
         } else {
             dispatch(createRecipe(input))
-            // DEBERÍA VERIFICAR DESDE EL BACK SI REALMENTE FUE CREADA
             setMsgSuccess(true)
             cleanForm(event.target)
             setTimeout(() => {
