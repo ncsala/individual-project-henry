@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY3;
+const apiKey = process.env.API_KEY4;
 
 // Se traen los modelos de la base de datos
 const { Recipe, Type_of_diet } = require('../db');
