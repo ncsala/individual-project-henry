@@ -8,21 +8,20 @@ const { getBdAndApiRecipes } = require('../services/fetchRecipes');
 // Si no existe ninguna receta mostrar un mensaje adecuado
 router.get('/', async (request, response) => {
 	try {
-		// Desestructuro la query que viene en el request
+		// throw new Error('No se puede conectar a la base de datos');
 		const { name } = request.query;
 
-		// Se trae la data de la API y la BD
 		const allRecipes = await getBdAndApiRecipes();
 
-        //Si no viene ningun nombre y las recetas vienen vaciás se muestra un mensaje
-        if (!name && !allRecipes.length) {
-            return response.status(400).json({
-                message: 'No hay recetas en la base de datos',
-            });
-        }
-            
-        // Si no viene ningún nombre por query mostrar todas las recetas
-        if (!name) response.send(allRecipes);
+		//Si no viene ningún nombre y las recetas vienen vaciás se muestra un mensaje
+		if (!name && !allRecipes.length) {
+			return response.status(400).send({
+				message: 'Todavía no hay recetas en la base de datos',
+			});
+		}
+
+		// Si no viene ningún nombre por query mostrar todas las recetas
+		if (!name) response.send(allRecipes);
 
 		if (name) {
 			// Filtro las recetas que contengan el nombre ingresado por query
@@ -31,20 +30,19 @@ router.get('/', async (request, response) => {
 			);
 
 			// Si existe alguna receta mostrarla
-			if (filteredRecipes.length) response.json(filteredRecipes);
+			if (filteredRecipes.length) response.send(filteredRecipes);
 
 			// Si no existe ninguna receta con ese nombre mostrar un mensaje adecuado
 			if (!filteredRecipes.length) {
-				response.status(400).json({
+				response.status(400).send({
 					message: 'La receta que buscas se perdió en algún momento',
 				});
 			}
 		}
-	
-    // Si hay error capturarlo e informar que no se puede obtener la data
 	} catch (error) {
 		response.status(500).send({
-			message: 'No se pudo obtener la información de la API ni de la Base de Datos. Error interno del servidor',
+			message: `No se pudo obtener la información de la API ni de la Base de Datos. 
+                Error interno del servidor`,
 		});
 	}
 });
@@ -59,31 +57,22 @@ router.get('/:id', async (request, response) => {
 		const { id } = request.params;
 		// Se trae la data de la API y la BD
 		const allRecipes = await getBdAndApiRecipes();
-        
-        if (!id) response.send(allRecipes);
-		
-        if (id) {
-			// Se filtra la receta que coincida con el id de la request
-            // Se usa solo doble igual porque de la base de datos vienen como string
-            // y en la api como number
-			const filteredRecipe = allRecipes.filter(
-				(recipe) => recipe.recipe_id == id
-			);
 
-			// Si no existe ninguna receta con ese id mostrar un mensaje adecuado
-			if (!filteredRecipe.length) {
-				response.status(404).json({
-					message: 'Ops, parece que la página ya no existe.',
-				});
-			}
-            
-			// Si existe alguna receta mostrarla
-			if (filteredRecipe.length) response.json(filteredRecipe);
+		// Se filtra la receta que coincida con el id de la request
+		const filteredRecipe = allRecipes.filter(
+			(recipe) => recipe.recipe_id == id
+		);
+
+		// Si no existe ninguna receta con ese id mostrar un mensaje adecuado
+		if (!filteredRecipe.length) {
+			response.status(404).send({
+				message: 'Ops, parece que la página ya no existe.',
+			});
 		}
 
-		// Si no viene ningún id de params mostrar todas las recetas
+		// Si existe alguna receta mostrarla
+		if (filteredRecipe.length) response.send(filteredRecipe);
 	} catch (error) {
-		// Si hay error capturarlo e informar que no se puede obtener la data
 		response.status(500).send({
 			message:
 				'No se pudo obtener la información de la API ni de la Base de Datos. Error interno del servidor',

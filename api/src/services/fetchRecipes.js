@@ -1,44 +1,46 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY4;
+const apiKey = process.env.API_KEY1;
 
 // Se traen los modelos de la base de datos
 const { Recipe, Type_of_diet } = require('../db');
 
 // Se obtiene la información de la API
 const getApiRecipes = async () => {
-	const response = await fetch(
-		`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=15&apiKey=${apiKey}`
-	);
+	try {
+		const response = await fetch(
+			`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=15&apiKey=${apiKey}`
+		);
 
-	// Se convierte la respuesta de un objeto JSON a un objeto de JS
-	const data = await response.json();
+		// data = {results: [{receta1}, {receta2}, {receta3}]}, offset = 0, ...}
+		const data = await response.json();
 
-	// Se mapea solo los datos que se necesitan
-	// recipes = [{receta1}, {receta2}, {receta3}]
-	const recipes = await data.results?.map((recipe) => {
-		return {
-			recipe_id: recipe.id,
-			recipe_name: recipe.title,
-			dish_description: recipe.summary,
-			score: recipe.spoonacularScore,
-			healthy_food_level: recipe.healthScore,
-			step_by_step: recipe.analyzedInstructions[0],
-			diets: recipe.diets,
-			image: recipe.image,
-			created_in_db: false,
-		};
-	});
+		// recipes = [{receta1}, {receta2}, {receta3}]
+		const recipes = await data.results?.map((recipe) => {
+			return {
+				recipe_id: recipe.id,
+				recipe_name: recipe.title,
+				dish_description: recipe.summary,
+				score: recipe.spoonacularScore,
+				healthy_food_level: recipe.healthScore,
+				step_by_step: recipe.analyzedInstructions[0],
+				diets: recipe.diets,
+				image: recipe.image,
+				created_in_db: false,
+			};
+		});
 
-	// Compruebo que venga algo en recipes para que no se rompa si la api no devuelve nada.
-	// Devuelvo array sino devuelve nada
-	return recipes ? recipes : [];
+		// return []
+		// Compruebo que venga algo en recipes para que no se rompa si la api no devuelve nada,
+		// y devuelvo array vacío
+		return recipes ? recipes : [];
+	} catch (error) {
+		console.log(error);
+		return [];
+	}
 };
 
 // Se obtiene la información de la BD
-// Trae todas las recetas de la BD y además incluye el modelo Type_of_diet
-// con el atributo type_of_diet_name
-// Puse un try por si hay un error en la BD(?)
 const getDbRecipes = async () => {
 	try {
 		const dbData = await Recipe.findAll({
@@ -51,8 +53,8 @@ const getDbRecipes = async () => {
 			},
 		});
 
-		// Formatear la información que se trae de la base de datos 
-        // Para que quede igual que la API
+		// Formatear la información que se trae de la base de datos
+		// Para que quede igual que la API
 		const recipes = await dbData.map((recipe) => {
 			return {
 				recipe_id: recipe.recipe_id,
@@ -69,9 +71,9 @@ const getDbRecipes = async () => {
 			};
 		});
 
-		return recipes;
+		// return []
+		return recipes ? recipes : [];
 	} catch (error) {
-		// Si hay un error en la BD, se devuelve un array vacío y se loguea el error
 		console.error(error);
 		return [];
 	}
@@ -81,7 +83,6 @@ const getDbRecipes = async () => {
 const getBdAndApiRecipes = async () => {
 	const apiRecipes = await getApiRecipes();
 	const dbRecipes = await getDbRecipes();
-
 	const allRecipes = [...apiRecipes, ...dbRecipes];
 
 	return allRecipes;

@@ -7,7 +7,6 @@ const router = Router();
 // Recibe los datos recolectados desde el formulario controlado de la ruta de creación de recetas por body
 // Crea una receta en la base de datos
 router.post('/', async (request, response) => {
-    console.log(request.body);
 	try {
 		// Se desestructura el body de la request
 		const {
