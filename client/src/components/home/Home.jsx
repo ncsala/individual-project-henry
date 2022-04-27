@@ -1,14 +1,12 @@
-import React from 'react';
-// Importación de Hooks
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
 
+import { useDispatch, useSelector } from 'react-redux';
 import { getRecipes } from 'redux/actions/actions';
 
 // Componentes
 import Paginated from 'components/paginated/Paginated';
 import Cards from 'components/cards/Cards';
-import Filters from 'components/filters/Filters';
+import Filters from 'components/filters/Filters.jsx';
 
 import styles from './Home.module.css'
 
@@ -55,7 +53,7 @@ const Home = () => {
     // cuando se cambie el estado de recipes
     useEffect(() => {
         dispatch(getRecipes());
-    }, [dispatch]);
+    }, []);
 
     return (
         <main className={styles.main_home}>
@@ -80,13 +78,12 @@ const Home = () => {
             </nav>
 
             {/* Renderiza las recetas */}
-            <section className={styles.recipes_container}>
-                {(error.length && <p>{error}</p>) ||
-                    (!currentRecipes.length
-                        ? (<h2 className={styles.load}> </h2>)
-                        : <Cards currentRecipes={currentRecipes} />)
-                }
-            </section>
+            {(error.length && <p className={styles.recipes_p}>{error}</p>) ||
+                (!currentRecipes.length
+                    ? (<h2 className={styles.load}> </h2>)
+                    : <section className={styles.recipes_container}> <Cards currentRecipes={currentRecipes} /></section>)
+            }
+
         </main>
     );
 };

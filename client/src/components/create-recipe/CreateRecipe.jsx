@@ -1,11 +1,10 @@
-import React from 'react';
-
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { createRecipe, getDiets } from 'redux/actions/actions.js';
+import React, { useState, useEffect } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { createRecipe, getDiets } from 'redux/actions/actions.js';
 
 import styles from './CreateRecipe.module.css'
 

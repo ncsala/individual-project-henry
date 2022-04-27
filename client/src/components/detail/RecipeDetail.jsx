@@ -1,16 +1,17 @@
-import React from 'react';
-import { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getDetail } from 'redux/actions/actions';
-import PrintsImage from 'components/prints-image/PrintsImage';
+import PrintsImage from 'components/prints-image/PrintsImage.jsx';
 
 import styles from './RecipeDetail.module.css';
 
-const RecipeDetail = (props) => {
+const RecipeDetail = () => {
 	const dispatch = useDispatch();
 	const recipeDetail = useSelector((state) => state.recipeDetails);
+	console.log(recipeDetail);
+	const errors = useSelector((state) => state.msgDetailError);
 	const { id } = useParams();
 
 	useEffect(() => {
@@ -19,11 +20,7 @@ const RecipeDetail = (props) => {
 
 	return (
 		<>
-			<div>
-				<Link to='/recipes'>Volver</Link>
-			</div>
-
-			{recipeDetail.length > 0 ? (
+			{(errors.length && <div className={styles.error}>{errors}</div>) ||
 				recipeDetail.map((recipeDetail) => {
 					return (
 						<section
@@ -64,13 +61,10 @@ const RecipeDetail = (props) => {
 								name={recipeDetail.recipe_name}
 							/>
 
-							<h4>Diets: {recipeDetail.diets  }</h4>
+							<h4>Diets: {recipeDetail.diets}</h4>
 						</section>
 					);
-				})
-			) : (
-				<span>Cargando...</span>
-			)}
+				})}
 		</>
 	);
 };

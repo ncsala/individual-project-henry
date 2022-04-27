@@ -1,6 +1,6 @@
 import React from 'react'
-import RecipeCard from 'components/card/RecipeCard';
 
+import RecipeCard from 'components/card/RecipeCard';
 
 function Cards({ currentRecipes }) {
     return (

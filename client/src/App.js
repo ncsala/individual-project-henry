@@ -9,7 +9,7 @@ import LandingPage from './components/landing/LandingPage';
 import Home from './components/home/Home';
 import NavBar from 'components/nav-bar/NavBar';
 import CreateRecipe from 'components/create-recipe/CreateRecipe';
-import RecipeDetail from 'components/detail/RecipeDetail';
+import RecipeDetail from 'components/detail/RecipeDetail.jsx';
 
 import './App.css';
 

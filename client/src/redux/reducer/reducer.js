@@ -17,11 +17,22 @@ const initialState = {
 	recipeDetails: [],
 	allDiets: [],
 	msgError: [],
+    msgDetailError: [],
+    msgDietsErrors: [],
 };
 
 const rootReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case GET_RECIPES:
+            if (action.payload.message) {
+                return {
+                    ...state,
+                    allRecipes: [],
+                    filteredRecipes: [],
+                    msgError: action.payload.message,
+                };
+            }
+            
 			return {
 				...state,
 				allRecipes: action.payload,
@@ -30,16 +41,25 @@ const rootReducer = (state = initialState, action) => {
 			};
 
 		case GET_DETAIL:
+            if (action.payload.message) {
+                return {
+                    ...state,
+                    recipeDetails: [],
+                    msgDetailError: action.payload.message,
+                };
+            }
+
 			return {
 				...state,
 				recipeDetails: action.payload,
+                msgDetailError: [],
 			};
 
 		case GET_DIETS: {
 			return {
 				...state,
 				allDiets: action.payload,
-				msgError: [],
+				msgDietsError: [],
 			};
 		}
 

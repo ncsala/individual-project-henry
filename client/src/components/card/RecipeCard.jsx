@@ -1,8 +1,7 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
 
-import PrintsImage from 'components/prints-image/PrintsImage';
+import PrintsImage from 'components/prints-image/PrintsImage.jsx';
 
 import styles from './RecipeCard.module.css'
 
