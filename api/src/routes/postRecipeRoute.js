@@ -45,7 +45,6 @@ router.post('/', async (request, response) => {
 			});
 		}
 	} catch (error) {
-		// Si hay error capturarlo e informar que no se puede obtener la data
 		response.status(500).send({
 			message: 'No se pudo crear la receta',
 		});

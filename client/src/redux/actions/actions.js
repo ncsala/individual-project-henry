@@ -9,11 +9,10 @@ export const GET_RECIPES = 'GET_RECIPES',
 
 export const localHost = 'http://localhost:3001';
 
-const serverNotAvailableError = {
-        type: SHOW_ERRORS,
-        payload: 'No se puede conectar a la base de datos',
-    }
-
+// const serverNotAvailableError = {
+//         type: SHOW_ERRORS,
+//         payload: 'No se puede conectar a la base de datos',
+//     }
 
 // Busca la data del Backend de las recetas y dispare un action con la data
 export function getRecipes() {
