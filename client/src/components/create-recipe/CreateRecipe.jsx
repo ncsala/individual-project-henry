@@ -156,6 +156,7 @@ const CreateRecipe = () => {
     };
 
     const handleCheckbox = (event) => {
+        console.log(event.target.value)
         const { value, checked } = event.target;
         if (checked) setInput({ ...input, diets: [...input.diets, value] });
         if (!checked) setInput({ ...input, diets: input.diets.filter(diet => diet !== value) });

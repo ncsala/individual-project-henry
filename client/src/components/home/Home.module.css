@@ -80,6 +80,7 @@
 	/* min-height: 100vh; */
 	width: 95%;
 	margin: 0 auto;
+    padding-bottom: 2em;
 	display: grid;
 	grid-auto-rows: auto;
 	gap: 3em;

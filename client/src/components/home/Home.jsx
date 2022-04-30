@@ -10,16 +10,8 @@ import Filters from 'components/filters/Filters.jsx';
 
 import styles from './Home.module.css'
 
-const RECIPES_PER_PAGE = 9;
+const RECIPES_PER_PAGE = 12;
 
-// Input de búsqueda para encontrar recetas por nombre
-// Área donde se verá el listado de recetas. Deberá mostrar su:
-// Imagen
-// Nombre
-// Tipo de dieta (vegetariano, vegano, apto celíaco, etc)
-// Botones/Opciones para filtrar por por tipo de dieta
-// Botones/Opciones para ordenar tanto ascendentemente como descendentemente las recetas por orden alfabético y por puntuación
-// Paginado para ir buscando y mostrando las siguientes recetas, 9 recetas por pagina, mostrando las primeros 9 en la primer pagina.
 const Home = () => {
     const dispatch = useDispatch();
     // allRecipes = [{receta1}, {receta2}, {receta3}]
@@ -31,7 +23,7 @@ const Home = () => {
     const [order, setOrder] = useState('disorderly');
 
     // PAGINACIÓN ----------------------------------------------------------------------------------------------------
-    // Se crea la paginación de 9 recetas por pagina
+    // Se crea la paginación de 12 recetas por pagina
     const [currentPage, setCurrentPage] = useState(1);
     const lastRecipeInPage = currentPage * RECIPES_PER_PAGE;
     const firstRecipeInPage = lastRecipeInPage - RECIPES_PER_PAGE;
@@ -61,6 +53,7 @@ const Home = () => {
             <nav className={styles.paginated}>
                 <Paginated
                     allRecipes={filteredRecipes.length}
+                    currentPage={currentPage}
                     setCurrentPage={setCurrentPage}
                     RECIPES_PER_PAGE={RECIPES_PER_PAGE}
                 />

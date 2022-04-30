@@ -9,10 +9,10 @@ export const GET_RECIPES = 'GET_RECIPES',
 
 export const localHost = 'http://localhost:3001';
 
-// const serverNotAvailableError = {
-//         type: SHOW_ERRORS,
-//         payload: 'No se puede conectar a la base de datos',
-//     }
+const serverNotAvailableError = {
+        type: SHOW_ERRORS,
+        payload: 'No se puede conectar a la base de datos',
+    }
 
 // Busca la data del Backend de las recetas y dispare un action con la data
 export function getRecipes() {
@@ -27,10 +27,7 @@ export function getRecipes() {
 				payload: allRecipes,
 			});
 		} catch (error) {
-			return dispatch({
-				type: SHOW_ERRORS,
-				payload: 'No se puede conectar a la base de datos',
-			});
+			return dispatch(serverNotAvailableError);
 		}
 	};
 }
@@ -45,26 +42,8 @@ export function getDiets() {
 				payload: allDiets,
 			});
 		} catch (error) {
-			return dispatch({
-				type: SHOW_ERRORS,
-				payload: 'No se puede conectar a la base de datos',
-			});
+			return dispatch(serverNotAvailableError);
 		}
-
-		// fetch(`${localHost}/types`)
-		// 	.then((response) => response.json())
-		// 	.then((allDiets) => {
-		// 		return dispatch({
-		// 			type: GET_DIETS,
-		// 			payload: allDiets,
-		// 		});
-		// 	})
-		// 	.catch((eror) => {
-		// 		return dispatch({
-		// 			type: SHOW_ERRORS,
-		// 			payload: 'No se puede conectar a la base de datos',
-		// 		});
-		// 	});
 	};
 }
 
@@ -79,10 +58,7 @@ export function getDetail(id) {
 				payload: detail,
 			});
 		} catch (error) {
-			return dispatch({
-				type: SHOW_ERRORS,
-				payload: 'No se puede conectar a la base de datos',
-			});
+			return dispatch(serverNotAvailableError);
 		}
 	};
 }
@@ -121,11 +97,7 @@ export function searchRecipesByName(name) {
 				});
 			}
 		} catch (error) {
-			// Por si no esta levantado el backend
-			return dispatch({
-				type: SHOW_ERRORS,
-				payload: 'No se puede conectar a la base de datos',
-			});
+			return dispatch(serverNotAvailableError);
 		}
 	};
 }
@@ -147,10 +119,7 @@ export function createRecipe(recipe) {
 				payload: 'La receta se ha creado con éxito',
 			});
 		} catch (error) {
-			return dispatch({
-				type: SHOW_ERRORS,
-				payload: 'No se puede conectar a la base de datos',
-			});
+			return dispatch(serverNotAvailableError);
 		}
 	};
 }
