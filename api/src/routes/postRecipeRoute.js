@@ -33,7 +33,9 @@ router.post('/', async (request, response) => {
 		// Se traen los tipos de dieta de la base de datos
 		// que coincidan con los que se reciben en la request por body
 		const dietTypeDb = await Type_of_diet.findAll({
-			where: { type_of_diet_name: diets },
+			where: {
+				type_of_diet_name: diets,
+			},
 		});
 
 		newRecipe.addType_of_diet(dietTypeDb);

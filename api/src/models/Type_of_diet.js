@@ -12,6 +12,7 @@ module.exports = (sequelize) => {
 		type_of_diet_name: {
 			type: DataTypes.STRING,
 			allowNull: false,
+            unique: true,
 		},
 	});
 };

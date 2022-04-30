@@ -15,6 +15,7 @@ module.exports = (sequelize) => {
 		recipe_name: {
 			type: DataTypes.STRING,
 			allowNull: false,
+            unique: true,
 		},
 		// Resumen del plato *
 		dish_description: {
