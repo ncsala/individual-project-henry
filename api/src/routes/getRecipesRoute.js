@@ -6,7 +6,7 @@ const { getBdAndApiRecipes } = require('../services/fetchRecipes');
 // GET /recipes?name="...":
 // Obtener un listado de las recetas que contengan la palabra ingresada como query parameter
 // Si no existe ninguna receta mostrar un mensaje adecuado
-router.get('/', async (request, response) => {
+router.get('/', async (request, response, next) => {
 	try {
 		// throw new Error('No se puede conectar a la base de datos');
 		const { name } = request.query;
@@ -40,10 +40,7 @@ router.get('/', async (request, response) => {
 			}
 		}
 	} catch (error) {
-		response.status(500).send({
-			message: `No se pudo obtener la información de la API ni de la Base de Datos. 
-                Error interno del servidor`,
-		});
+		next(error);
 	}
 });
 
@@ -51,7 +48,7 @@ router.get('/', async (request, response) => {
 // Obtener el detalle de una receta en particular
 // Debe traer solo los datos pedidos en la ruta de detalle de receta
 // Incluir los tipos de dieta asociados
-router.get('/:id', async (request, response) => {
+router.get('/:id', async (request, response, next) => {
 	try {
 		// Se desestructura el id de params de la request
 		const { id } = request.params;
@@ -73,10 +70,7 @@ router.get('/:id', async (request, response) => {
 		// Si existe alguna receta mostrarla
 		if (filteredRecipe.length) response.send(filteredRecipe);
 	} catch (error) {
-		response.status(500).send({
-			message:
-				'No se pudo obtener la información de la API ni de la Base de Datos. Error interno del servidor',
-		});
+		next(error);
 	}
 });
 

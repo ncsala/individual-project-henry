@@ -1,5 +1,7 @@
 import React from 'react';
 
+import styles from './Paginated.module.css';
+
 const Paginated = ({ allRecipes, currentPage, setCurrentPage, RECIPES_PER_PAGE }) => {
     const pageNumbers = [];
 
@@ -25,21 +27,31 @@ const Paginated = ({ allRecipes, currentPage, setCurrentPage, RECIPES_PER_PAGE }
 
     return (
         <>
-            <button onClick={handlePreviousPage} disabled={currentPage === 1}>Anterior</button>
+            <button
+                onClick={handlePreviousPage}
+                disabled={currentPage === 1}
+                className={currentPage === 1 ? styles.disabled : styles.previous_and_next_button}>
+                Anterior
+            </button>
             {pageNumbers &&
                 pageNumbers.map((number) => {
                     return (
                         <button
                             onClick={() => paginated(number)}
                             key={number}
-                            // className={currentPage === number ? 'active' : ''}
+                            className={currentPage === number ? styles.disabled : styles.page_number}
                             disabled={currentPage === number}
                         >
                             {number}
                         </button>
                     );
                 })}
-            <button onClick={handleNextPage} disabled={currentPage === numbersOfPages}>Siguiente</button>
+            <button
+                onClick={handleNextPage}
+                disabled={currentPage === numbersOfPages}
+                className={currentPage === numbersOfPages ? styles.disabled : styles.previous_and_next_button}>
+                Siguiente
+            </button>
         </>
     );
 };

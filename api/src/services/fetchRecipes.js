@@ -1,6 +1,8 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const apiKey = process.env.API_KEY6;
+
+let changeKeyNumber = 2;
+let apiKey = process.env[`API_KEY${changeKeyNumber}`];
 
 // Se traen los modelos de la base de datos
 const { Recipe, Type_of_diet } = require('../db');
@@ -8,12 +10,34 @@ const { Recipe, Type_of_diet } = require('../db');
 // Se obtiene la información de la API
 const getApiRecipes = async () => {
 	try {
-		const response = await fetch(
-			`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=15&apiKey=${apiKey}`
+		let response = await fetch(
+			`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=100&apiKey=${apiKey}`
 		);
 
 		// data = {results: [{receta1}, {receta2}, {receta3}]}, offset = 0, ...}
-		const data = await response.json();
+		let data = await response.json();
+
+        // Esto es lo que recibo cuando llego al limite diario de peticiones a la API
+		// {
+		//     "status": "failure",
+		//     "code": 402,
+		//     "message": "Your daily points limit of 150 has been reached. Please upgrade your plan to continue using the API."
+		//   }
+        // Cambio dinámicamente la key de la API
+		if (data.status === 'failure') {
+			while (await data.status === 'failure') {
+				changeKeyNumber++;
+				apiKey = process.env[`API_KEY${changeKeyNumber}`];
+				let response = await fetch(
+					`https://api.spoonacular.com/recipes/complexSearch?addRecipeInformation=true&number=15&apiKey=${apiKey}`
+				);
+				data = await response.json();
+                if (data.status !== 'failure') {   
+                    break;
+                }
+                console.log('API_KEY', apiKey);
+			}
+		}
 
 		// recipes = [{receta1}, {receta2}, {receta3}]
 		const recipes = await data.results?.map((recipe) => {

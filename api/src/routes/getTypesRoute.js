@@ -7,7 +7,7 @@ const router = Router();
 // GET /types:
 // Obtener todos los tipos de dieta posibles
 // En una primera instancia, cuando no exista ninguno, deberán precargar la base de datos con los tipos de datos indicados por spoonacular acá
-router.get('/', async (request, response) => {
+router.get('/', async (request, response, next) => {
 	try {
 		// Se busca en BD si existen tipos de dieta
 		const types = await Type_of_diet.findAll();
@@ -32,9 +32,7 @@ router.get('/', async (request, response) => {
 
 		if (types.length) response.json(types);
 	} catch (error) {
-		response.status(500).send({
-			message: 'No se pudo obtener la información solicitada',
-		});
+		next(error);
 	}
 });
 
